@@ -27,7 +27,8 @@ INSTALL_DATA=$(INSTALL) -D --mode 0644
 PRG_DIR=gencrl.d gentoken.d init.d issue.d lib publish.d root.d
 DATA_DIR=public_html
 
-PRG=$$(find $(PRG_DIR) -type f)
+PRG=$$(find $(PRG_DIR) -type f -o -type l)
+DATA=$$(find $(DATA_DIR) -type f)
 
 all: ici.1
 
@@ -39,10 +40,13 @@ install: all
 	$(INSTALL) -D --backup --mode 640 ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
 	$(INSTALL) -D ici.1 $(DESTDIR)$(mandir)/man1/ici.1
+	cp -pr public_html $(DESTDIR)/$(etcdir)/ici/public_html
 	for f in $(PRG); do \
 		$(INSTALL_EXE) $$f $(DESTDIR)$(etcdir)/ici/$$f; \
 	done
-
+	for f in $(DATA); do \
+		$(INSTALL) -D $$f $(DESTDIR)/$(etcdir)/ici/$$f; \
+	done
 clean:
 
 distclean:
