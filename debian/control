@@ -1,0 +1,17 @@
+Source: ici
+Maintainer: Leif Johansson <leifj@sunet.se>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 8), help2man, devscripts
+Standards-Version: 3.9.4
+Homepage: https://github.com/leifj/ici
+Vcs-Browser: https://github.com/leifj/ici
+Vcs-Git: git://github.com/leifj/ici.git
+
+Package: ici
+Architecture: all
+Depends: ${misc:Depends}, openssl, opensc, libengine-pkcs11-openssl
+Recommends: softhsm
+Description: imbecil certificate issuer
+ ici is a refactor of the CSP package with support for PKCS#11
+ enabled hardware security modules.
