@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mkdir -p "$ICI_CONF_DIR/ca/$ICI_CA"

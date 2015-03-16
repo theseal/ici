@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. $ICI_CONF_DIR/lib/config.sh
+read_ca_config
+
+mkdir -p $ICI_CA_DIR/certs
+
+cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16 > $ICI_CA_DIR/serial
+
+$ICI_TRACE $ICI_OPENSSL ca -notext -batch -subj "$ICI_SUBJECT_DN" \
+   -config $ICI_CONFIG -engine pkcs11 \
+   -keyfile "${ICI_CA_KEY_SLOT}:${ICI_CA_KEY_ID}" -keyform engine \
+   -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$1" > /dev/null

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. $ICI_CONF_DIR/lib/config.sh
+read_ca_config
+
+$ICI_TRACE $ICI_PKCS11_TOOL --module=$ICI_PKCS11 \
+  -l --keypairgen \
+  --key-type rsa:${ICI_BITS:-4096} \
+  --slot ${ICI_CA_KEY_SLOT} --id ${ICI_CA_KEY_ID}

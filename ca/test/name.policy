@@ -1,0 +1,7 @@
+[policy]
+countryName 	       = match 
+stateOrProvinceName    = optional
+organizationName       = supplied
+organizationalUnitName = optional
+commonName             = supplied
+emailAddress           = optional
