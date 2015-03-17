@@ -1,7 +1,7 @@
 #!/bin/sh
 
 . $ICI_CONF_DIR/lib/config.sh
-read_ca_config
+. $ICI_CA_DIR/ca.config
 
 c_init  > $ICI_CONFIG
 c_req  >> $ICI_CONFIG
@@ -28,6 +28,7 @@ case $ICI_TYPE in
       ;;
 esac
 c_ext_altnames >> $ICI_CONFIG
+c_ext_policy >> $ICI_CONFIG
 
 if [ "x$ICI_VERBOSE" = "xy" ]; then
    cat $ICI_CONFIG

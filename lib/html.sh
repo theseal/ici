@@ -35,7 +35,13 @@ cat<<EOH
 
 <div class="btn-group" role="group">
    <a href="ca.crt" class="btn btn-success">Download CA Certificate (PEM)</a>
+EOH
+if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
+cat<<EOH
    <a href="crl.pem" class="btn btn-info">Download CRL (PEM)</a>
+EOH
+fi
+cat<<EOH
 </div>
 <div class="certlist">
 <table class="table table-condensed table-striped table-bordered">
@@ -90,6 +96,7 @@ fp_sha1=`$ICI_OPENSSL x509 -noout -fingerprint -sha1 < "${ICI_CA_DIR}/certs/${se
 fp_sha256=`$ICI_OPENSSL x509 -noout -fingerprint -sha256 < "${ICI_CA_DIR}/certs/${serial}.pem" | awk -F= '{print $NF}'`
 not_before=`$ICI_OPENSSL x509 -noout -startdate < "${ICI_CA_DIR}/certs/${serial}.pem" | awk -F= '{print $NF}'`
 not_after=`$ICI_OPENSSL x509 -noout -enddate < "${ICI_CA_DIR}/certs/${serial}.pem" | awk -F= '{print $NF}'`
+text=`$ICI_OPENSSL x509 -noout -text < "${ICI_CA_DIR}/certs/${serial}.pem"`
 
 set_status_display
 
@@ -125,6 +132,7 @@ cat<<EOH
    <dt>Fingerprint (sha256)</dt>
    <dd>${fp_sha256}</dd>
 </dl>
+<pre>${text}</pre>
 </div>
 </div>
 </body>

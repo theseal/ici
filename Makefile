@@ -24,7 +24,7 @@ mandir=${prefix}/share/man
 INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
 INSTALL_DATA=$(INSTALL) -D --mode 0644
-PRG_DIR=gencrl.d gentoken.d init.d issue.d lib publish.d root.d
+PRG_DIR=gencrl.d gentoken.d init.d issue.d lib publish.d root.d revoke.d
 DATA_DIR=public_html
 
 PRG=$$(find $(PRG_DIR) -type f -o -type l)

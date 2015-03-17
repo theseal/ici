@@ -1,17 +1,4 @@
 
-trace () 
-{
-   echo "** $@"
-   $@
-}
-
-read_ca_config ()
-{
-if [ -f "$ICI_CA_DIR/ca.config" ]; then
-   . "$ICI_CA_DIR/ca.config"
-fi
-}
-
 av_list ()
 {
 name=$1; shift
@@ -95,6 +82,7 @@ serial                = "${ICI_CA_DIR}/serial"
 database              = "${ICI_CA_DIR}/index.txt"
 preserve              = no
 unique_subject        = no
+extensions            = extensions
 crl_extensions        = crl_extensions
 EOC
 if [ -f "${ICI_CA_DIR}/name.policy" ]; then
@@ -114,6 +102,23 @@ cat<<EOC
 subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid
 EOC
+if [ ! -z "${ICI_PUBLIC_URL}" ]; then
+cat<<EOC
+authorityInfoAccess     = caIssuers;URI:"${ICI_PUBLIC_URL}/ca.crt"
+crlDistributionPoints   = URI:"${ICI_PUBLIC_URL}/crl.pem"
+issuerAltName           = URI:"${ICI_PUBLIC_URL}"
+EOC
+fi
+if [ ! -z "$ICI_EMAIL" -o ! -z "$ICI_URI" -o ! -z "$ICI_DNS" -o ! -z "$ICI_IP" ]; then
+cat<<EOC
+subjctAltNames          = @altnames
+EOC
+fi
+if [ -f "${ICI_CA_DIR}/ca.policy" ]; then
+cat<<EOC
+certificatePolicies     = ia5org,@certpolicy
+EOC
+fi
 }
 
 c_ext_ca ()
@@ -125,12 +130,44 @@ keyUsage                = critical,cRLSign, keyCertSign
 EOC
 }
 
+c_ext_tls_server ()
+{
+cat<<EOC
+
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = serverAuth
+EOC
+}
+
+c_ext_tls_client ()
+{
+cat<<EOC
+
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = clientAuth
+EOC
+}
+
+c_ext_tls_peer ()
+{
+cat<<EOC
+
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = serverAuth, clientAuth
+EOC
+}
+
+c_ext_policy ()
+{
+if [ -f "${ICI_CA_DIR}/ca.policy" ]; then
+   cat "${ICI_CA_DIR}/ca.policy"
+fi
+}
 
 c_ext_altnames ()
 {
-if [ ! -z "$ICI_ALTNAMES" ]; then
-   echo "subjctAltNames = @altnames"
-
+if [ ! -z "$ICI_EMAIL" -o ! -z "$ICI_URI" -o ! -z "$ICI_DNS" -o ! -z "$ICI_IP" ]; then
+   echo
    echo "[altnames]"
    av_list 'email' "$ICI_EMAIL"
    av_list 'URI' "$ICI_URI"

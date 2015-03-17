@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -z "$1" -o -z "$2" ]; then
+   echo "Usage ${ICI_CMD} [options] revoke <serial> <reason>"
+   exit 1
+fi
+
+
+. $ICI_CONF_DIR/lib/config.sh
+read_ca_config
+
+mkdir -p $ICI_CA_DIR/certs
+
+$ICI_OPENSSL ca -batch \
+   -config $ICI_CONFIG -revoke "${ICI_CA_DIR}/certs/$1.pem" -crl_reason $2
