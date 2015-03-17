@@ -1,5 +1,13 @@
-ici (1.0-1) UNRELEASED; urgency=medium
+ici (1.1-1) UNRELEASED; urgency=medium
 
   * Initial release.
+  * ignore more
+  * template config file
+  * fix make install
+  * ignore more
+  * installing public_html
+  * ignore more
+  * reorg command scripts and support for more extensions
+  * revoke
 
  -- Leif Johansson <leifj@sunet.se>  Mon, 16 Mar 2015 16:41:04 +0100
