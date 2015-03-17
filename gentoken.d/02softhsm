@@ -1,11 +1,10 @@
 #!/bin/sh
 
-. $ICI_CONF_DIR/lib/config.sh
-read_ca_config
+. $ICI_CA_DIR/ca.config
 
 cat>$ICI_CA_DIR/softhsm.conf<<EOC
 0: $ICI_CA_DIR/softhsm.db
 EOC
 
-$ICI_TRACE softhsm --slot ${ICI_CA_KEY_SLOT} --label "${ICI_CA}_key" \
+softhsm --slot ${ICI_CA_KEY_SLOT} --label "${ICI_CA}_key" \
    --init-token --pin ${ICI_PKCS11_PIN} --so-pin ${ICI_PKCS11_PIN}

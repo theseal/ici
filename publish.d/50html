@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. $ICI_CA_DIR/ca.config
+
 if [ -z "$1" ]; then
    echo "Usage ${ICI_CMD} [options] publish <output dir>"
    exit 1

@@ -6,6 +6,7 @@ ICI_CA_KEY_SLOT=0
 ICI_PKCS11=/usr/lib/softhsm/libsofthsm.so
 ICI_PKCS11_PIN=secret
 ICI_MD=sha256
+ICI_PUBLIC_URL=http://ca.example.com
 
 # remove to disable softhsm
 SOFTHSM_CONF=$ICI_CA_DIR/softhsm.conf
