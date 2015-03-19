@@ -1,3 +1,21 @@
+ici (1.2-1ubuntu1) UNRELEASED; urgency=medium
+
+  * debian package
+  * debian package
+  * ignore more
+  * ignore more
+  * changelog
+  * 1.2
+  * spellcheck
+  * changelog
+  * changelog
+  * conditionally read config - avoid beeing too quiet
+  * fix keygen
+  * issue multiple certs from directory
+  * no trace
+
+ -- Leif Johansson <leifj@sunet.se>  Thu, 19 Mar 2015 13:56:47 +0100
+
 ici (1.2-1) trusty; urgency=medium
 
   * Initial release.
