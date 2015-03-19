@@ -12,6 +12,6 @@ Package: ici
 Architecture: all
 Depends: ${misc:Depends}, openssl, opensc, libengine-pkcs11-openssl
 Recommends: softhsm
-Description: imbecil certificate issuer
+Description: the imbecile certificate issuer
  ici is a refactor of the CSP package with support for PKCS#11
  enabled hardware security modules.
