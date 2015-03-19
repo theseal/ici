@@ -1,4 +1,4 @@
-ici (1.1-1) UNRELEASED; urgency=medium
+ici (1.2-1) UNRELEASED; urgency=medium
 
   * Initial release.
   * ignore more
@@ -9,5 +9,7 @@ ici (1.1-1) UNRELEASED; urgency=medium
   * ignore more
   * reorg command scripts and support for more extensions
   * revoke
+  * readme docs
+  * user certs
 
  -- Leif Johansson <leifj@sunet.se>  Mon, 16 Mar 2015 16:41:04 +0100
