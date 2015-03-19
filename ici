@@ -149,11 +149,13 @@ ICI_CMD="$cmd"
 export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_CMD
 
 . $ICI_CONF_DIR/lib/config.sh
-. $ICI_CA_DIR/ca.config
+if [ -f $ICI_CA_DIR/ca.config ]; then
+   . $ICI_CA_DIR/ca.config
+fi
 . $ICI_CONF_DIR/lib/args.sh
 
 for part in $parts; do
-    "$part" "$@" >$log 2>&1
+    "$part" "$@"
 done
 
 exit 0
