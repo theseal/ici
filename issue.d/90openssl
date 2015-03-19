@@ -4,9 +4,36 @@
 
 mkdir -p $ICI_CA_DIR/certs
 
+process_csr ()
+{
+csr=$1
+name=$2
+nameopt=""
+if [ ! -z "$name" ]; then
+   nameopt="-subj \"$name\""
+fi
 cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16 > $ICI_CA_DIR/serial
-
-$ICI_OPENSSL ca -notext -batch -subj "$ICI_SUBJECT_DN" \
+$ICI_OPENSSL ca -notext -batch $nameopt \
    -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
    -keyfile "${ICI_CA_KEY_SLOT}:${ICI_CA_KEY_ID}" -keyform engine \
-   -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$1"
+   -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
+}
+
+if [ -d "$1" ]; then
+   for f in `find "$1" -name \*.csr -a -readable`; do
+      f_dir="`dirname $f`"
+      f_nam="`basename $f`"
+      f_done="${f_dir}/.${f_nam}.done"
+      if [ ! -f "$f_done" ]; then
+         process_csr "$f"
+         date > $f_done
+      else
+         echo "*** cert for $f already issued"
+      fi
+   done
+elif [ -f "$1" ]; then
+   process_csr "$1" "$ICI_SUBJECT_DN"
+else
+   echo "*** Bad file type: $1" >&2
+   exit 1
+fi
