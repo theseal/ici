@@ -83,5 +83,6 @@ Here www.example.com.csr is a standard PEM-encoded PKCS#10. Creating it is left 
 
 In a production environment you'll probably not keep your public web repository on the same mashine as the CA.
 
-[^aboutthename] The name 'CSP' predated the MSFT certificate service provider specification but was clearly an unfortunate choice.
-[^vim] I won't insult your intelligence by using $EDITOR in the examples.
+[^aboutthename]: The name 'CSP' predated the MSFT certificate service provider specification but was clearly an unfortunate choice.
+
+[^vim]: I won't insult your intelligence by using $EDITOR in the examples.
