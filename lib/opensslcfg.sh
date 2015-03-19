@@ -26,6 +26,9 @@ case $ICI_TYPE in
    peer)
       c_ext_tls_peer >> $ICI_CONFIG
       ;;
+   user)
+      c_ext_user >> $ICI_CONFIG
+      ;;
 esac
 c_ext_altnames >> $ICI_CONFIG
 c_ext_policy >> $ICI_CONFIG

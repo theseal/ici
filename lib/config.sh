@@ -148,6 +148,16 @@ extendedKeyUsage        = clientAuth
 EOC
 }
 
+c_ext_user ()
+{
+cat<<EOC
+
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = clientAuth,emailProtection
+EOC
+}
+
+
 c_ext_tls_peer ()
 {
 cat<<EOC
