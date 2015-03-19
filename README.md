@@ -3,9 +3,23 @@ ici - the Imbecile Certificate Issuer
 Introduction
 ------------
 
-Once there was a package called 'CSP' [^aboutthename] which was rumored to have been used in a lot of places to build and run small-scale "in-house" CAs. The code has now degenerated to the point where I don't care to maintain it (also its perl which I've weend myself off over the years) anymore. I recently found myself wanting a simple CA again (its been a while) and decided to try my hand at rewriting CSP using an even more simple tool than perl: sh
+Once there was a package called 'CSP' (https://launchpad.net/csp) [^aboutthename] which was rumored to have been used in a lot of places to build and run small-scale "in-house" CAs. The code has now degenerated to the point where I don't care to maintain it (also its perl which I've weend myself off over the years) anymore. I recently found myself wanting a simple CA again (its been a while) and decided to try my hand at rewriting CSP using an even more simple tool than perl: sh
 
 As with 'CSP' the basic architecture is simple: use existing tools like openssl and pkcs11-tool but wrap them (and their config files) in a nice blanket of sensible defaults.
+
+What is it good for?
+-----------------
+
+* small-scale inhouse CAs
+* offline root CAs that still needs a public repository
+* CA for your etcd or docker registry
+
+What is it not good for?
+----------------------
+
+* Not having to pay for "real" certificates
+* Public websites and e-commerce
+* acme/letsencrypt setups
 
 Acknowledgement
 ---------------
@@ -41,7 +55,7 @@ First take a look at /etc/ici/ici.conf to verify that the defaults look ok to yo
 # vi /var/lib/ici/myca/cert.policy
 ```
 
-If you are going to publish an (offline) repository for you CA you should make sure to change the ICI_PUBLIC_URL setting.  The gentoken command creates a SoftHSM token inside the CA directory (/var/lib/ici/myca/) - if you want to use another PKCS11 token, change the ICI_PKCS11, ICI_PKCS11_SLOT and ICI_PKCS11_KEY_ID to the appropriate values (and you can also skip running ici gentoken in this case).
+If you are going to publish an (offline) repository for you CA you should make sure to change the ICI_PUBLIC_URL setting.  The gentoken command creates a SoftHSM token inside the CA directory (/var/lib/ici/myca/) - if you want to use another PKCS11 token, change the ICI_PKCS11, ICI_PKCS11_SLOT and ICI_PKCS11_KEY_ID to the appropriate values (and you can also skip running ici gentoken in this case). If you want gentoken to set a more sensible password, alter ICI_PKCS11_PIN before running gentoken.
 
 The two files name.policy and cert.policy are openssl config file fragments: name.policy limits subject DNs and cert.policy specifies the policy extension. Edit to taste.
 
