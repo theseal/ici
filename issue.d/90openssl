@@ -20,15 +20,15 @@ $ICI_OPENSSL ca -notext -batch $nameopt \
 }
 
 if [ -d "$1" ]; then
+   done_file="$1/requests.txt"
+   touch $done_file
    for f in `find "$1" -name \*.csr -a -readable`; do
-      f_dir="`dirname $f`"
-      f_nam="`basename $f`"
-      f_done="${f_dir}/.${f_nam}.done"
-      if [ ! -f "$f_done" ]; then
-         process_csr "$f"
-         date > $f_done
-      else
-         echo "*** cert for $f already issued"
+      rfp=`$ICI_OPENSSL req < $f | sha256sum | awk '{print $1}'`
+      if [ "x$rfp" != "x" ]; then
+         grep -q $rfp $done_file || {
+            process_csr "$f"
+            echo "$rfp:$f:`date`" >> $done_file
+         }
       fi
    done
 elif [ -f "$1" ]; then

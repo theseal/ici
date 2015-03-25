@@ -3,6 +3,8 @@
 ICI_DAYS=30
 ICI_SERIAL=0
 ICI_SUBJECT_DN=""
+ICI_ALTNAMES=""
+ICI_COPY_EXTENSIONS="none"
 
 if [ $ICI_CMD = "root" ]; then
    ICI_TYPE="root"
@@ -25,6 +27,21 @@ fi
             --type|-t)
                 ICI_TYPE="$2"
                 shift ;;
+            --dns)
+                ICI_ALTNAMS="DNS:$2 $ICI_ALTNAMES"
+                shift ;;
+            --ip)
+                ICI_ALTNAMS="IP:$2 $ICI_ALTNAMES"
+                shift ;;
+            --email)
+                ICI_EMAIL="email:$2 $ICI_ALTNAMES"
+                shift ;;
+            --uri)
+                ICI_URI="URI:$2 $ICI_ALTNAMES"
+                shift ;;
+            --copy-extensions)
+                ICI_COPY_EXTENSIONS="copy"
+                ;;
             -- )
         # Stop option processing
                 shift
@@ -40,4 +57,4 @@ fi
     done
 }
 
-export ICI_DAYS ICI_SERIAL ICI_SUBJECT_DN ICI_TYPE
+export ICI_DAYS ICI_SERIAL ICI_SUBJECT_DN ICI_TYPE ICI_ALTNAMES ICI_COPY_EXTENSIONS

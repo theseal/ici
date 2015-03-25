@@ -1,21 +1,4 @@
 
-av_list ()
-{
-name=$1; shift
-idx=1
-if [ ! -z "$1" ]; then
-   (
-   IFS=,
-   for v in $1; do
-      if [ ! -z "$v" ]; then
-         echo ${name}.$idx = "$v"
-         idx=`expr $idx + 1`
-      fi
-   done 
-   )
-fi
-}
-
 c_init ()
 {
 cat<<EOC
@@ -84,6 +67,7 @@ preserve              = no
 unique_subject        = no
 extensions            = extensions
 crl_extensions        = crl_extensions
+copy_extensions       = ${ICI_COPY_EXTENSIONS:-none}
 EOC
 if [ -f "${ICI_CA_DIR}/name.policy" ]; then
    echo "policy       = policy"
@@ -109,9 +93,9 @@ crlDistributionPoints   = URI:"${ICI_PUBLIC_URL}/crl.pem"
 issuerAltName           = URI:"${ICI_PUBLIC_URL}"
 EOC
 fi
-if [ ! -z "$ICI_EMAIL" -o ! -z "$ICI_URI" -o ! -z "$ICI_DNS" -o ! -z "$ICI_IP" ]; then
+if [ ! -z "$ICI_ALTNAMES" ]; then
 cat<<EOC
-subjctAltNames          = @altnames
+subjctAltNames          = ${ICI_ALTNAMES}
 EOC
 fi
 if [ -f "${ICI_CA_DIR}/ca.policy" ]; then
@@ -134,6 +118,7 @@ c_ext_tls_server ()
 {
 cat<<EOC
 
+basicConstraints        = CA:FALSE
 keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage        = serverAuth
 EOC
@@ -143,6 +128,7 @@ c_ext_tls_client ()
 {
 cat<<EOC
 
+basicConstraints        = CA:FALSE
 keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage        = clientAuth
 EOC
@@ -152,6 +138,7 @@ c_ext_user ()
 {
 cat<<EOC
 
+basicConstraints        = CA:FALSE
 keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage        = clientAuth,emailProtection
 EOC
@@ -162,6 +149,7 @@ c_ext_tls_peer ()
 {
 cat<<EOC
 
+basicConstraints        = CA:FALSE
 keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage        = serverAuth, clientAuth
 EOC
@@ -173,16 +161,3 @@ if [ -f "${ICI_CA_DIR}/ca.policy" ]; then
    cat "${ICI_CA_DIR}/ca.policy"
 fi
 }
-
-c_ext_altnames ()
-{
-if [ ! -z "$ICI_EMAIL" -o ! -z "$ICI_URI" -o ! -z "$ICI_DNS" -o ! -z "$ICI_IP" ]; then
-   echo
-   echo "[altnames]"
-   av_list 'email' "$ICI_EMAIL"
-   av_list 'URI' "$ICI_URI"
-   av_list 'DNS' "$ICI_DNS"
-   av_list 'IP' "$ICI_IP"
-fi
-}
-
