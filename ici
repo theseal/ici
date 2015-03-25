@@ -21,6 +21,9 @@
 set -e
 self=`basename $0`
 
+ICI_CMD=$0
+export ICI_CMD
+
 usage ()
 {
     echo "\
