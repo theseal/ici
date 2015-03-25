@@ -13,6 +13,6 @@ if [ -z "${ICI_CRL_KEY_ID}" ]; then
 fi
 
 $ICI_OPENSSL ca -gencrl -notext -batch \
-   -config $ICI_CONFIG -engine pkcs11 -crl_extensions crl_extensions \
+   -config $ICI_CONFIG -engine pkcs11 -crlexts crl_extensions \
    -keyfile "${ICI_CRL_KEY_SLOT}:${ICI_CRL_KEY_ID}" -keyform engine \
-   -crldays ${ICI_DAYS} -out "${ICI_CA_DIR}/crl.pem" >$log 2>&1
+   -crldays ${ICI_DAYS} -out "${ICI_CA_DIR}/crl.pem"
