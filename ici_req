@@ -146,6 +146,7 @@ fi
 
 $ICI_OPENSSL req -config $cfg -new -newkey rsa:${ICI_BITS} -reqexts req_extensions -sha256 -keyout $key -nodes -out $csr
 if [ -z "$sname" ]; then
-   sname=`$ICI_OPENSSL req -noout -subject < $csr |  sed 's/subject=//'`
+   sname=`$ICI_OPENSSL req -noout -subject < $csr |  sed 's/subject=//' | sha1sum`
 fi
-test -f $key -a -f $csr && mv $key "$sname.key" && mv $csr "$sname.csr"
+test -s $key -a -s $csr && mv $key "$sname.key" && mv $csr "$sname.csr"
+echo "Successfully generated $sname.key and $sname.csr"
