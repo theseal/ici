@@ -28,16 +28,16 @@ fi
                 ICI_TYPE="$2"
                 shift ;;
             --dns)
-                ICI_ALTNAMS="DNS:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="DNS:$2 $ICI_ALTNAMES"
                 shift ;;
             --ip)
-                ICI_ALTNAMS="IP:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="IP:$2 $ICI_ALTNAMES"
                 shift ;;
             --email)
-                ICI_EMAIL="email:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="email:$2 $ICI_ALTNAMES"
                 shift ;;
             --uri)
-                ICI_URI="URI:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="URI:$2 $ICI_ALTNAMES"
                 shift ;;
             --copy-extensions)
                 ICI_COPY_EXTENSIONS="copy"
