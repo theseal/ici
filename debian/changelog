@@ -1,3 +1,9 @@
+ici (1.6-1ubuntu1) trusty; urgency=medium
+
+  * cut 1.5
+
+ -- Leif Johansson <leifj@sunet.se>  Thu, 26 Mar 2015 23:48:56 +0100
+
 ici (1.5-1ubuntu1) trusty; urgency=medium
 
   * fix gencrl
