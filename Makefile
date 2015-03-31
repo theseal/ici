@@ -19,6 +19,7 @@ DESTDIR?=
 prefix=/usr
 bindir=${prefix}/bin
 etcdir=/etc
+sharedir=$(prefix)/share
 mandir=${prefix}/share/man
 
 INSTALL=install
@@ -40,13 +41,13 @@ install: all
 	$(INSTALL) -D --backup --mode 640 ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
 	$(INSTALL) -D ici.1 $(DESTDIR)$(mandir)/man1/ici.1
-	cp -pr public_html $(DESTDIR)/$(etcdir)/ici/public_html
 	for f in $(PRG); do \
-		$(INSTALL_EXE) $$f $(DESTDIR)$(etcdir)/ici/$$f; \
+		$(INSTALL_EXE) $$f $(DESTDIR)$(sharedir)/ici/$$f; \
 	done
 	for f in $(DATA); do \
-		$(INSTALL) -D $$f $(DESTDIR)/$(etcdir)/ici/$$f; \
+		$(INSTALL) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
 	done
+	cp -pr public_html $(DESTDIR)/$(sharedir)/ici/public_html
 clean:
 
 distclean:

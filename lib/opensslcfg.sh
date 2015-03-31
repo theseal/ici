@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. $ICI_CONF_DIR/lib/config.sh
+. $ICI_LIB_DIR/lib/config.sh
 . $ICI_CA_DIR/ca.config
 
 c_init  > $ICI_CONFIG

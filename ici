@@ -58,7 +58,7 @@ export ICI_PKCS11_TOOL
         ICI_CONF_DIR="/etc/ici"
     fi
     ICI_CONF="${ICI_CONF_DIR}/ici.conf"
-    export ICI_CONF_DIR ICI_CONF
+    export ICI_CONF_DIR ICI_LIB_DIR ICI_CONF
 
     if test -e "$ICI_CONF"; then
 	set -a
@@ -125,7 +125,7 @@ _trap ()
    exit $err
 }
 
-dir="${ICI_CONF_DIR}/$cmd.d"
+dir="${ICI_LIB_DIR}/$cmd.d"
 cfg=`mktemp`
 log=`mktemp`
 trap '_trap $cfg $log' EXIT
@@ -151,11 +151,11 @@ ICI_CMD="$cmd"
 
 export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_CMD
 
-. $ICI_CONF_DIR/lib/config.sh
+. $ICI_LIB_DIR/lib/config.sh
 if [ -f $ICI_CA_DIR/ca.config ]; then
    . $ICI_CA_DIR/ca.config
 fi
-. $ICI_CONF_DIR/lib/args.sh
+. $ICI_LIB_DIR/lib/args.sh
 
 for part in $parts; do
     "$part" "$@"
