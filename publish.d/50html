@@ -9,8 +9,8 @@ fi
 
 PUBDIR="$1"
 mkdir -p "$PUBDIR"
-rsync -a "${ICI_CONF_DIR}/public_html/" "${PUBDIR}/"
-. "${ICI_CONF_DIR}/lib/html.sh"
+rsync -a "${ICI_LIB_DIR}/public_html/" "${PUBDIR}/"
+. "${ICI_LIB_DIR}/lib/html.sh"
 
 cp "${ICI_CA_DIR}/ca.crt" "${PUBDIR}"
 if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
