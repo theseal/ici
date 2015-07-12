@@ -48,8 +48,7 @@ ICI_BITS="4096"
     while test $# -gt 0; do
 	case "$1" in
 	    --verbose | -v)
-		ICI_VERBOSE=y
-		shift ;;
+		ICI_VERBOSE=y ;;
 	    --help | -h )
 		usage
 		exit 0 ;;
