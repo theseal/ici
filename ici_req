@@ -46,6 +46,7 @@ ICI_BITS="4096"
 # Command line parsing.
 {
     while test $# -gt 0; do
+	if [ -z "$ICI_ALTNAMES" ]; then comma=; else comma=,; fi
 	case "$1" in
 	    --verbose | -v)
 		ICI_VERBOSE=y
@@ -60,17 +61,17 @@ ICI_BITS="4096"
                 ICI_BITS="$2"
                 shift ;;
             --dns)
-                ICI_ALTNAMES="DNS:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="DNS:$2$comma$ICI_ALTNAMES"
                 fqdn="$2"
                 shift ;;
             --ip)
-                ICI_ALTNAMES="IP:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="IP:$2$comma$ICI_ALTNAMES"
                 shift ;;
             --email)
-                ICI_ALTNAMES="email:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="email:$2$comma$ICI_ALTNAMES"
                 shift ;;
             --uri)
-                ICI_ALTNAMES="URI:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="URI:$2$comma$ICI_ALTNAMES"
                 shift ;;
 	    -* )
 		echo "$self: unknown option $1" 1>&2
@@ -103,7 +104,8 @@ _trap ()
 
 if [ $# -gt 0 ]; then
    fqdn="$1"; shift
-   ICI_ALTNAMES="DNS:$fqdn $ICI_ALTNAMES"
+   if [ -z "$ICI_ALTNAMES" ]; then comma=; else comma=,; fi
+   ICI_ALTNAMES="DNS:$fqdn$comma$ICI_ALTNAMES"
 fi
 
 if [ -z "$ICI_ALTNAMES" ]; then
