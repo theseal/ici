@@ -1,3 +1,15 @@
+ici (1.8-1ubuntu1) trusty; urgency=medium
+
+  [ Leif Johansson ]
+  * fix from Richard Levitte
+
+  [ Richard Levitte ]
+  * Have commas between subject altnames
+
+  [ Leif Johansson ]
+
+ -- Leif Johansson <leifj@sunet.se>  Mon, 13 Jul 2015 11:47:22 +0200
+
 ici (1.7-1ubuntu1) trusty; urgency=medium
 
   * move most stuff in etc to share
