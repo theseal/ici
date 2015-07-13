@@ -14,6 +14,7 @@ fi
 
 {
     while test $# -gt 0; do
+	altnamecomma=; if [ -n "$ICI_ALTNAMES" ]; then altnamecomma=,; fi
         case "$1" in
             --serial|-s)
                 ICI_SERIAL="$2"
@@ -28,16 +29,16 @@ fi
                 ICI_TYPE="$2"
                 shift ;;
             --dns)
-                ICI_ALTNAMES="DNS:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="DNS:$2$altnamecomma$ICI_ALTNAMES"
                 shift ;;
             --ip)
-                ICI_ALTNAMES="IP:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="IP:$2$altnamecomma$ICI_ALTNAMES"
                 shift ;;
             --email)
-                ICI_ALTNAMES="email:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="email:$2$altnamecomma$ICI_ALTNAMES"
                 shift ;;
             --uri)
-                ICI_ALTNAMES="URI:$2 $ICI_ALTNAMES"
+                ICI_ALTNAMES="URI:$2$altnamecomma$ICI_ALTNAMES"
                 shift ;;
             --copy-extensions)
                 ICI_COPY_EXTENSIONS="copy"
