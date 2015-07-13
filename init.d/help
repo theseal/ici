@@ -1,0 +1,20 @@
+Usage: ici [GLOBALOTIONS] CA init
+
+Initialises a new structure for certificate authority CA.  When done,
+make sure to check out and edit the files created there.  It's important
+to at least review and edit $ICI_CA_ROOT/CA/ca.config.
+
+Environment:
+  ICI_CA_ROOT   the directory in which the ceritificate authority
+                structure is stored.  'ici help' explains this variable
+		further.
+
+For the GLOBALOPTIONS, see 'ici help'.
+
+Files:
+  $ICI_CA_ROOT/CA/ca.config     Configuration if the certificate authority.
+                                Review and edit carefully, at the very least
+				ICI_PKCS11_PIN, as well as ICI_PKCS11 if you
+				are going to use a PKCS#11 engine other than
+				softhsm.
+  $ICI_CA_ROOT/CA/name.policy   OpenSSL name policy.
