@@ -23,6 +23,7 @@ self=`basename $0`
 
 ICI_CMD=$0
 export ICI_CMD
+ICI_VERSION=1.8.90
 
 usage ()
 {
@@ -46,6 +47,20 @@ command line parameters are parsed.  The file is sourced as a shell
 script.  If ICI_CONF_DIR is not set, the path /etc/ici is used.
 
 " 1>&2
+}
+
+version ()
+{
+    echo "\
+ici ${ICI_VERSION}
+
+Copyright (C) 2012-2014 Simon Josefsson & Leif Johansson.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Simon Josefsson (overall structure) and Leif Johansson.
+" >&2
 }
 
 listcmds ()
