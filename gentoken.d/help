@@ -1,0 +1,20 @@
+Usage: ici [GLOBALOPTIONS] CA gentoken
+
+Generates a softhsm token to be useed with ici for the certificate
+authority CA.
+
+It uses the following variables from $ICI_CA_ROOT/CA/ca.config:
+
+  ICI_CA_KEY_SLOT   The softhsm slot for the generated key.
+  ICI_PKCS11_PIN    The passphrase used to secure the key.
+
+For the GLOBALOPTIONS, see 'ici help'.
+
+Files:
+
+  $ICI_CA_ROOT/CA/ca.config     Configuration file for the certificate
+                                authority CA.  See 'ici init' for more
+				information.
+  $ICI_CA_ROOT/CA/softhsm.db    The softhsm database.
+  $ICI_CA_ROOT/CA/softhsm.conf  The softhsm configuration file.
+
