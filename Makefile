@@ -31,16 +31,26 @@ DATA_DIR=public_html
 PRG=$$(find $(PRG_DIR) -type f -o -type l)
 DATA=$$(find $(DATA_DIR) -type f)
 
-all: ici.1
+all: manpages
 
+CMDHELPS=$(wildcard *.d/help)
+CMDPAGES=$(patsubst %.d/help, ici-%.1, $(CMDHELPS))
+manpages: ici.1 $(CMDPAGES)
 ici.1: Makefile ici
-	help2man --name="Imbecil Certificate Issuer" \
+	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
 		--no-info --no-discard-stderr --output=$@ ./ici
+$(CMDPAGES): Makefile ici $(CMDHELPS)
+	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
+		--no-info --no-discard-stderr \
+		--help-option="help `echo $@ | cut -f2 -d- | cut -f1 -d.`" \
+		--output=$@ ./ici
 
 install: all
 	$(INSTALL) -D --backup --mode 640 ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
-	$(INSTALL) -D ici.1 $(DESTDIR)$(mandir)/man1/ici.1
+	for f in ici.1 $(CMDPAGES); do \
+		$(INSTALL) -D $$f $(DESTDIR)$(mandir)/man1/$$f; \
+	done
 	for f in $(PRG); do \
 		$(INSTALL_EXE) $$f $(DESTDIR)$(sharedir)/ici/$$f; \
 	done
@@ -53,7 +63,7 @@ clean:
 distclean:
 
 maintainerclean:
-	rm -f ici.1
+	rm -f ici.1 $(CMDPAGES)
 
 check:
 	@echo "no checks implemented - if it compiles, ship it!"
@@ -61,7 +71,7 @@ check:
 dist: all
 	rm -rf ici-$(VERSION)
 	mkdir ici-$(VERSION)
-	cp -r COPYING AUTHORS NEWS Makefile README ici ici.1 $(PRG_DIR) $(DATA_DIR) ici-$(VERSION)/
+	cp -r COPYING AUTHORS NEWS Makefile README ici ici.1 $(CMDPAGES) $(PRG_DIR) $(DATA_DIR) ici-$(VERSION)/
 	tar cfz ici-$(VERSION).tar.gz ici-$(VERSION)
 	rm -rf ici-$(VERSION)
 

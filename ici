@@ -38,6 +38,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -v, --verbose             explain what is being done
   -h, --help                show this help text and exit
   -V, --version             show version information and exit
+  -l, --list-cmds           list available commands
 
 The environment variable ICI_CONF_DIR may specify a path to the
 configuration directory where the file ici.conf is read before
@@ -45,6 +46,21 @@ command line parameters are parsed.  The file is sourced as a shell
 script.  If ICI_CONF_DIR is not set, the path /etc/ici is used.
 
 " 1>&2
+}
+
+listcmds ()
+{
+    for cmd in `ls -d "${ICI_LIB_DIR}"/*.d | sed -e 's|.*/||g' -e 's|\.d$||'`; do
+	descfile="${ICI_LIB_DIR}/$cmd.d/desc"
+	if [ -f "$descfile" ]; then desc=`head -1 "$descfile"`; fi
+	if [ -n "$desc" ]; then
+	    # Avoid having commands longer than 10 characters
+	    cmd=`echo "$cmd          " | cut -c-10`
+	    echo "$cmd - $desc" >&2
+	else
+	    echo "$cmd" >&2
+	fi
+    done
 }
 
 ICI_OPENSSL=openssl
@@ -84,6 +100,9 @@ export ICI_PKCS11_TOOL
 	    --version | -V )
 		version
 		exit 0 ;;
+	    --list-cmds | -l )
+		listcmds
+		exit 0 ;;
 	    -- )
         # Stop option processing
 		shift
@@ -108,15 +127,36 @@ export ICI_PKCS11_TOOL
 ca="$1"
 shift
 
-cmd="$1"
-shift
+if test $# -ne 0; then
+    cmd="$1"
+    shift
+fi
+
+# A small hack to implement command specific help.  This means you
+# can never have a ca called "help".
+if [ "$ca" = "help" -a "$cmd" = "" ]; then
+    usage
+    exit 0
+fi
 
 dir="${ICI_LIB_DIR}/$cmd.d"
 
 if ! test -d "$dir"; then
     echo "$self: unknown command '$cmd'" 1>&2
-    echo "Try 'ici --help' for more information." 1>&2
+    echo "Try 'ici help' for more information." 1>&2
     exit 1
+fi
+
+# A small hack to implement command specific help.  This means you
+# can never have a ca called "help".
+if [ "$ca" = "help" ]; then
+    if [ -f "$dir/help" ]; then
+	cat "$dir/help" >&2
+	exit 0
+    else
+	echo "$self: help not available for command '$cmd'" >&2
+	exit 1
+    fi
 fi
 
 _trap ()
