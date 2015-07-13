@@ -49,8 +49,7 @@ ICI_BITS="4096"
 	if [ -z "$ICI_ALTNAMES" ]; then comma=; else comma=,; fi
 	case "$1" in
 	    --verbose | -v)
-		ICI_VERBOSE=y
-		shift ;;
+		ICI_VERBOSE=y ;;
 	    --help | -h )
 		usage
 		exit 0 ;;
