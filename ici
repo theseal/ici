@@ -29,11 +29,22 @@ usage ()
 {
     echo "\
 Usage: ici [OPTION...] CA COMMAND [COMMAND-OPTION...]
+   or: ici help [COMMAND]
 
-ici is a stupidly simple certifiction authority
+ici is a stupidly simple certificate authority.
 
-The COMMAND specify the action sequence performed by the tool.
+In the first form, ici performs COMMAND on the certificate authority
+structure named CA.
 
+In the second form, ici provides help for COMMAND if one is given,
+otherwise it produces the same output as 'ici --help'
+
+Before doing anything else, you will need to initialise your
+certificate authority, possibly generate a token, and create a
+root certificate.  See 'ici help init', 'ici help gentoken' and
+'ici help root' for more information.
+
+Options:
 Mandatory arguments to long options are mandatory for short options too.
 
   -v, --verbose             explain what is being done
@@ -41,10 +52,16 @@ Mandatory arguments to long options are mandatory for short options too.
   -V, --version             show version information and exit
   -l, --list-cmds           list available commands
 
-The environment variable ICI_CONF_DIR may specify a path to the
-configuration directory where the file ici.conf is read before
-command line parameters are parsed.  The file is sourced as a shell
-script.  If ICI_CONF_DIR is not set, the path /etc/ici is used.
+Environment:
+  ICI_CONF_DIR  can be used to specify a directory where the configuration
+                file ici.conf is found.  This file is sourced before the
+                command line parameters are parsed.
+                Default directory is /etc/ici.
+  ICI_CA_ROOT   can be used to specify the root directory under which the
+                certificate authority structures are stored.  This is
+                overriden by ICI_CA_ROOT in ${ICI_CONF_DIR}/ici.conf if
+                that file exists and defines that variable.
+                Default directory is /var/lib/ici.
 
 " 1>&2
 }
