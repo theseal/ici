@@ -1,7 +1,8 @@
 #!/bin/sh
 
 if [ -z "$1" -o -z "$2" ]; then
-   echo "Usage ${ICI_CMD} [options] revoke <serial> <reason>"
+   echo "Error: revoke: Missing arguments" >&2
+   ${ICI_PRG} help revoke
    exit 1
 fi
 

@@ -1,0 +1,36 @@
+Usage: ici [GLOBALOPTIONS] CA root [OPTIONS]
+
+Generates the key and issues the root certificate for the certificate
+authority CA.
+
+It uses the following variables from $ICI_CA_ROOT/CA/ca.config for key
+generation:
+
+  ICI_CA_KEY_ID     The identity of the key.
+  ICI_CA_KEY_SLOT   The slot for the key.
+  ICI_PKCS11_PIN    The passphrase for the key.
+
+Options:
+  -t, --type TYPE       The type of certificate to issue.  The currently
+                        known types are ca, client, server, peer, user.
+  -d, --days N          The number of days of validity, starting now.
+  -n, --subject NAME    Subject name.
+                        Only used in the first form of this command.  The
+			form of NAME is explained below.
+  --dn, --subject_dn    Synonyms for --subject.
+  --dns FQDN            Subject alternate name, DNS variant.
+  --ip IP               Subject alternate name, IP address variant.
+  --email EMAIL         Subject alternate name, EMAIL variant.
+  --uri URI             Subject alternate name, URI variant.
+
+For the GLOBALOPTIONS, see 'ici help'.
+
+Files:
+
+  $ICI_CA_ROOT/CA/ca.config     Configuration file for the certificate
+                                authority CA.  See 'ici init' for more
+				information.
+  $ICI_CA_ROOT/CA/softhsm.db    The softhsm database.
+  $ICI_CA_ROOT/CA/softhsm.conf  The softhsm configuration file.
+  $ICI_CA_ROOT/CA/ca.crt        The issued certificate.
+

@@ -1,0 +1,30 @@
+Usage: ici [GLOBALOPTIONS] CA issue [OPTIONS] [--] CSR
+   or: ici [GLOBALOPTIONS] CA issue [OPTIONS] [--] DIRECTORY
+
+Issue and sign a certificate from a certificate request CSR, or a
+certificate from each CSR (file with names ending with .csr) in DIRECTORY.
+The certificate and key for the certificate aithority CA are used
+to sign the issued certificate(s).
+
+Options:
+  -t, --type TYPE       The type of certificate to issue.  The currently
+                        known types are ca, client, server, peer, user.
+  -d, --days N          The number of days of validity, starting now.
+  -n, --subject NAME    Subject name.
+                        Only used in the first form of this command.  The
+			form of NAME is explained below.
+  --dn, --subject_dn    Synonyms for --subject.
+  --dns FQDN            Subject alternate name, DNS variant.
+  --ip IP               Subject alternate name, IP address variant.
+  --email EMAIL         Subject alternate name, EMAIL variant.
+  --uri URI             Subject alternate name, URI variant.
+  --copy-extensions	Copy extensions from the certificate request(s).
+
+For the GLOBALOPTIONS, see 'ici help'.
+
+*SUBJECT NAMES*
+Subject names take many forms.  However, the only form supported in ici
+is the /NAME=VAL for, for example like this:
+
+  --dn "/C=SE/O=Example Company AB/CN=example.com"
+
