@@ -156,19 +156,17 @@ export ICI_PKCS11_TOOL
     export ICI_VERBOSE
 }
 
-ca="$1"
-shift
+if [ "$1" = "help" ]; then
+    ca=""
 
-if test $# -ne 0; then
     cmd="$1"
     shift
-fi
+else
+    ca="$1"
+    shift
 
-# A small hack to implement command specific help.  This means you
-# can never have a ca called "help".
-if [ "$ca" = "help" -a "$cmd" = "" ]; then
-    usage
-    exit 0
+    cmd="$1"
+    shift
 fi
 
 dir="${ICI_LIB_DIR}/$cmd.d"
@@ -177,18 +175,6 @@ if ! test -d "$dir"; then
     echo "$self: unknown command '$cmd'" 1>&2
     echo "Try 'ici help' for more information." 1>&2
     exit 1
-fi
-
-# A small hack to implement command specific help.  This means you
-# can never have a ca called "help".
-if [ "$ca" = "help" ]; then
-    if [ -f "$dir/help" ]; then
-	cat "$dir/help" >&2
-	exit 0
-    else
-	echo "$self: help not available for command '$cmd'" >&2
-	exit 1
-    fi
 fi
 
 _trap ()
@@ -217,8 +203,13 @@ if test -z "$parts"; then
     exit 1
 fi
 
-ICI_CA="$ca"
-ICI_CA_DIR="${ICI_CA_ROOT}/$ICI_CA"
+ICI_CA=""
+ICI_CA_DIR=""
+if [ "$cmd" != "help" ]; then
+    ICI_CA="$ca"
+    ICI_CA_DIR="${ICI_CA_ROOT}/$ICI_CA"
+fi
+
 ICI_CONFIG="$cfg"
 ICI_PRG=$0
 ICI_CMD="$cmd"
@@ -226,7 +217,7 @@ ICI_CMD="$cmd"
 export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_PRG ICI_CMD
 
 . $ICI_LIB_DIR/lib/config.sh
-if [ -f $ICI_CA_DIR/ca.config ]; then
+if [ -n "$ICI_CA" -a -f $ICI_CA_DIR/ca.config ]; then
    . $ICI_CA_DIR/ca.config
 fi
 . $ICI_LIB_DIR/lib/args.sh
