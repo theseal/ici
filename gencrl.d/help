@@ -1,0 +1,14 @@
+Usage: ici [GLOBALOPTIONS] CA gencrl [OPTIONS]
+
+Generate a certificate revokation list for the certificate authority CA.
+
+Ideally, this command should be run in regular intervals.  It could be
+a good idea to have it be run automatically, for example with a cron job.
+
+Options:
+
+  --days N      Indicates for how many days the generated crl is valid.
+                A new crl needs to get generated withing this time.
+
+For the GLOBALOPTIONS, see 'ici help'.
+
