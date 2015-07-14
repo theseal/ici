@@ -220,9 +220,10 @@ fi
 ICI_CA="$ca"
 ICI_CA_DIR="${ICI_CA_ROOT}/$ICI_CA"
 ICI_CONFIG="$cfg"
+ICI_PRG=$0
 ICI_CMD="$cmd"
 
-export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_CMD
+export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_PRG ICI_CMD
 
 . $ICI_LIB_DIR/lib/config.sh
 if [ -f $ICI_CA_DIR/ca.config ]; then
