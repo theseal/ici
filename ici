@@ -210,7 +210,7 @@ log=`mktemp`
 trap '_trap $cfg $log' EXIT
 
 parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
-    -type f -o -type l -executable -name '[0-9]*' \! -name \*~ | sort`)
+    \( -type f -o -type l \) -executable -name '[0-9]*' \! -name \*~ | sort`)
 
 if test -z "$parts"; then
     echo "$self: nothing to do?!" 1>&2
