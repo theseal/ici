@@ -1,0 +1,12 @@
+Usage: ici [GLOBALOPTIONS] CA revoke CERTCHKSUM REASON
+
+Revoke a certificate in certificate authority CA.  The certificate must
+be indicated by its checksum CERTCHKSUM, and a reason REASON must be
+given.  The available reasons are those given to 'openssl ca' with the
+option '-crl_reason', see the OpenSSL manual page for 'ca'.
+
+For the GLOBALOPTIONS, see 'ici help'.
+
+*Notes*
+A new certificate revokation list should be generated shortly after a
+certificate has been revoked, see 'ici help gencrl'.
