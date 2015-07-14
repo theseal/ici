@@ -1,0 +1,12 @@
+Usage: ici help
+   or: ici help COMMAND
+
+In the first form, display the exact same thing as 'ici --help'.
+
+In the second form, display the available help for subcommand COMMAND.
+
+Example:
+This help is displayed with this command:
+
+	ici help help
+

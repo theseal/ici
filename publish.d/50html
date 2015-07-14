@@ -3,7 +3,8 @@
 . $ICI_CA_DIR/ca.config
 
 if [ -z "$1" ]; then
-   echo "Usage ${ICI_CMD} [options] publish <output dir>"
+   echo "Error: publish: Missing arguments" >&2
+   ${ICI_PRG} help publish
    exit 1
 fi
 
