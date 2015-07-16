@@ -147,6 +147,8 @@ export ICI_PKCS11_TOOL
 	    --list-cmds | -l )
 		listcmds
 		exit 0 ;;
+	    --debug | -d )
+		ICI_DEBUG=y ;;
 	    -- )
         # Stop option processing
 		shift
@@ -165,7 +167,7 @@ export ICI_PKCS11_TOOL
 	exit 0
     fi
 
-    export ICI_VERBOSE
+    export ICI_VERBOSE ICI_DEBUG
 }
 
 if [ "$1" = "help" ]; then
@@ -192,20 +194,24 @@ fi
 _trap ()
 {
    err=$?
-   if [ $err -ne 0 ]; then
-      echo "--- cfg ---"
-      cat $1
-      echo "--- out ---"
-      cat $2 
+   if [ $err -ne 0 -a "$1" = "y" ]; then
+      if [ -s "$2" ]; then
+	  echo "--- cfg ---"
+	  cat $2
+      fi
+      if [ -s "$3" ]; then
+	  echo "--- out ---"
+	  cat $3
+      fi
    fi
-   unlink $1
    unlink $2
+   unlink $3
    exit $err
 }
 
 cfg=`mktemp`
 log=`mktemp`
-trap '_trap $cfg $log' EXIT
+trap '_trap "$ICI_DEBUG" $cfg $log' EXIT
 
 parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
     \( -type f -o -type l \) -executable -name '[0-9]*' \! -name \*~ | sort`)
