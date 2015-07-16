@@ -108,11 +108,23 @@ export ICI_PKCS11_TOOL
     ICI_CONF="${ICI_CONF_DIR}/ici.conf"
     export ICI_CONF_DIR ICI_LIB_DIR ICI_CONF
 
+    # Protect the global configuration variables, as there's no reason
+    # ici.conf should change them.
+    __save_ICD="$ICI_CONF_DIR"
+    __save_IC="$ICI_CONF"
     if test -e "$ICI_CONF"; then
 	set -a
 	. "$ICI_CONF"
 	set +a
     fi
+    if [ "$__save_ICD" != "$ICI_CONF_DIR" ]; then
+	echo "*** Warning: ICI_CONF_DIR was changed by $__save_IC...  ignored" >&2
+    fi
+    if [ "$__save_IC" != "$ICI_CONF" ]; then
+	echo "*** Warning: ICI_CONF was changed by $__save_IC...  ignored" >&2
+    fi
+    ICI_CONF_DIR="$__save_ICD"
+    ICI_CONF="$__save_IC"
 
     if test -z "${ICI_CA_ROOT}"; then
         ICI_CA_ROOT="/var/lib/ici"
