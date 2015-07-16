@@ -162,25 +162,22 @@ export ICI_PKCS11_TOOL
 	esac
     done
 
-    if test $# -eq 0; then
-	usage
-	exit 0
-    fi
-
     export ICI_VERBOSE ICI_DEBUG
 }
 
-if [ "$1" = "help" ]; then
-    ca=""
+test $# -ne 0 -a "$1" != "help" && { ca="$1";  shift; }
+test $# -ne 0                   && { cmd="$1"; shift; }
 
-    cmd="$1"
-    shift
-else
-    ca="$1"
-    shift
+if [ "$cmd" != "help" -a -z "$ca" ]; then
+    echo "$self: no certificate authority name given" >&2
+    echo "Try 'ici help' for more information." >&2
+    exit 1
+fi
 
-    cmd="$1"
-    shift
+if [ -z "$cmd" ]; then
+    echo "$self: no subcommand given" >&2
+    echo "Try 'ici help' for more information." >&2
+    exit 1
 fi
 
 dir="${ICI_LIB_DIR}/$cmd.d"
