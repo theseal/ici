@@ -21,8 +21,8 @@
 set -e
 self=`basename $0`
 
-ICI_CMD=$0
-export ICI_CMD
+ICI_PRG=$0
+export ICI_PRG
 ICI_VERSION=1.8.90
 
 usage ()
@@ -108,11 +108,23 @@ export ICI_PKCS11_TOOL
     ICI_CONF="${ICI_CONF_DIR}/ici.conf"
     export ICI_CONF_DIR ICI_LIB_DIR ICI_CONF
 
+    # Protect the global configuration variables, as there's no reason
+    # ici.conf should change them.
+    __save_ICD="$ICI_CONF_DIR"
+    __save_IC="$ICI_CONF"
     if test -e "$ICI_CONF"; then
 	set -a
 	. "$ICI_CONF"
 	set +a
     fi
+    if [ "$__save_ICD" != "$ICI_CONF_DIR" ]; then
+	echo "*** Warning: ICI_CONF_DIR was changed by $__save_IC...  ignored" >&2
+    fi
+    if [ "$__save_IC" != "$ICI_CONF" ]; then
+	echo "*** Warning: ICI_CONF was changed by $__save_IC...  ignored" >&2
+    fi
+    ICI_CONF_DIR="$__save_ICD"
+    ICI_CONF="$__save_IC"
 
     if test -z "${ICI_CA_ROOT}"; then
         ICI_CA_ROOT="/var/lib/ici"
@@ -135,6 +147,8 @@ export ICI_PKCS11_TOOL
 	    --list-cmds | -l )
 		listcmds
 		exit 0 ;;
+	    --debug | -d )
+		ICI_DEBUG=y ;;
 	    -- )
         # Stop option processing
 		shift
@@ -148,25 +162,22 @@ export ICI_PKCS11_TOOL
 	esac
     done
 
-    if test $# -eq 0; then
-	usage
-	exit 0
-    fi
-
-    export ICI_VERBOSE
+    export ICI_VERBOSE ICI_DEBUG
 }
 
-if [ "$1" = "help" ]; then
-    ca=""
+test $# -ne 0 -a "$1" != "help" && { ca="$1";  shift; }
+test $# -ne 0                   && { cmd="$1"; shift; }
 
-    cmd="$1"
-    shift
-else
-    ca="$1"
-    shift
+if [ "$cmd" != "help" -a -z "$ca" ]; then
+    echo "$self: no certificate authority name given" >&2
+    echo "Try 'ici help' for more information." >&2
+    exit 1
+fi
 
-    cmd="$1"
-    shift
+if [ -z "$cmd" ]; then
+    echo "$self: no subcommand given" >&2
+    echo "Try 'ici help' for more information." >&2
+    exit 1
 fi
 
 dir="${ICI_LIB_DIR}/$cmd.d"
@@ -180,20 +191,24 @@ fi
 _trap ()
 {
    err=$?
-   if [ $err -ne 0 ]; then
-      echo "--- cfg ---"
-      cat $1
-      echo "--- out ---"
-      cat $2 
+   if [ $err -ne 0 -a "$1" = "y" ]; then
+      if [ -s "$2" ]; then
+	  echo "--- cfg ---"
+	  cat $2
+      fi
+      if [ -s "$3" ]; then
+	  echo "--- out ---"
+	  cat $3
+      fi
    fi
-   unlink $1
    unlink $2
+   unlink $3
    exit $err
 }
 
 cfg=`mktemp`
 log=`mktemp`
-trap '_trap $cfg $log' EXIT
+trap '_trap "$ICI_DEBUG" $cfg $log' EXIT
 
 parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
     \( -type f -o -type l \) -executable -name '[0-9]*' \! -name \*~ | sort`)
@@ -211,10 +226,9 @@ if [ "$cmd" != "help" ]; then
 fi
 
 ICI_CONFIG="$cfg"
-ICI_PRG=$0
 ICI_CMD="$cmd"
 
-export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_PRG ICI_CMD
+export ICI_CA ICI_CA_DIR ICI_CONFIG ICI_CMD
 
 . $ICI_LIB_DIR/lib/config.sh
 if [ -n "$ICI_CA" -a -f $ICI_CA_DIR/ca.config ]; then
