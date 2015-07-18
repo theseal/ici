@@ -148,7 +148,8 @@ export ICI_PKCS11_TOOL
 		listcmds
 		exit 0 ;;
 	    --debug | -d )
-		ICI_DEBUG=y ;;
+		ICI_DEBUG=y
+		shift ;;
 	    -- )
         # Stop option processing
 		shift
