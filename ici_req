@@ -62,17 +62,17 @@ ICI_BITS="4096"
                 ICI_BITS="$2"
                 shift ;;
             --dns)
-                ICI_ALTNAMES="DNS:$2$comma$ICI_ALTNAMES"
+                ICI_ALTNAMES="${ICI_ALTNAMES}${comma}DNS:$2"
                 fqdn="$2"
                 shift ;;
             --ip)
-                ICI_ALTNAMES="IP:$2$comma$ICI_ALTNAMES"
+                ICI_ALTNAMES="${ICI_ALTNAMES}${comma}IP:$2"
                 shift ;;
             --email)
-                ICI_ALTNAMES="email:$2$comma$ICI_ALTNAMES"
+                ICI_ALTNAMES="${ICI_ALTNAMES}${comma}email:$2"
                 shift ;;
             --uri)
-                ICI_ALTNAMES="URI:$2$comma$ICI_ALTNAMES"
+                ICI_ALTNAMES="${ICI_ALTNAMES}${comma}URI:$2"
                 shift ;;
 	    -* )
 		echo "$self: unknown option $1" 1>&2
@@ -110,7 +110,7 @@ _trap ()
 if [ $# -gt 0 ]; then
    fqdn="$1"; shift
    if [ -z "$ICI_ALTNAMES" ]; then comma=; else comma=,; fi
-   ICI_ALTNAMES="DNS:$fqdn$comma$ICI_ALTNAMES"
+   ICI_ALTNAMES="${ICI_ALTNAMES}${comma}DNS:$fqdn"
 fi
 
 if [ -z "$ICI_ALTNAMES" ]; then
