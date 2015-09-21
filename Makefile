@@ -53,6 +53,7 @@ install: all
 	[ -f $(DESTDIR)$(etcdir)/ici/ici.conf ] || \
 		$(INSTALL_DATA) ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
+	$(INSTALL_EXE) ici_req $(DESTDIR)$(bindir)/ici_req
 	for f in ici.1 ici_req.1 $(CMDPAGES); do \
 		$(INSTALL) -D $$f $(DESTDIR)$(mandir)/man1/$$f; \
 	done
