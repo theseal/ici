@@ -18,21 +18,48 @@
 set -e
 self=`basename $0`
 
-ICI_CMD=$0
-export ICI_CMD
+ICI_REQ_CMD=$0
+export ICI_REQ_CMD
+ICI_REQ_VERSION=0.90
 
 usage ()
 {
     echo "\
-Usage: ici_req [-V] [-v] [-h] [--ip <ip>] [--dns <fqdn>] [--email <email>] [--uri <uri>] [<fqdn>]
+Usage: ici_req [-V] [-v] [-h] [--bits nnnn] [--ip <ip>] [--dns <fqdn>] [--email <email>] [--uri <uri>] [<fqdn>]
 
-ici_req is the request tool for the ici ca
+ici_req is a request tool for the ici ca
 
-  -v, --verbose             explain what is being done
-  -h, --help                show this help text and exit
-  -V, --version             show version information and exit
+There are numerous other more or less complicated tools to create
+certificate signing requests.  This is an stupidly simple one.
 
+Options:
+
+  -v, --verbose             explain what is being done.
+  -h, --help                show this help text and exit.
+  -V, --version             show version information and exit.
+
+  --bits nnnn               the size of the generated RSA key, in bits.
+                            Default is 4096.
+  --dns fqdn                add a fully qualified dns name to the cert
+                            subject altname.
+  --ip ip                   add a IP address to the cert subject altname.
+  --email email             add an email address to the cert subject altname.
+  --uri uri                 add a URI to the cert subject altname.
 " 1>&2
+}
+
+version ()
+{
+    echo "\
+ici ${ICI_REQ_VERSION}
+
+Copyright (C) 2012-2015 Leif Johansson.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Leif Johansson.
+" >&2
 }
 
 ICI_OPENSSL=openssl

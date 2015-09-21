@@ -35,15 +35,18 @@ all: manpages
 
 CMDHELPS=$(wildcard *.d/help)
 CMDPAGES=$(patsubst %.d/help, ici-%.1, $(CMDHELPS))
-manpages: ici.1 $(CMDPAGES)
-ici.1: Makefile ici
+manpages: ici.1 ici_req.1 $(CMDPAGES)
+ici.1: ici Makefile
 	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
-		--no-info --no-discard-stderr --output=$@ ./ici
-$(CMDPAGES): Makefile ici $(CMDHELPS)
+		--no-info --no-discard-stderr --output=$@ ./$<
+ici_req.1: ici_req Makefile
+	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
+		--no-info --no-discard-stderr --output=$@ ./$<
+$(CMDPAGES): ici Makefile $(CMDHELPS)
 	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
 		--no-info --no-discard-stderr \
 		--help-option="help `echo $@ | cut -f2 -d- | cut -f1 -d.`" \
-		--output=$@ ./ici
+		--output=$@ ./$<
 
 install: all
 	$(INSTALL_DATA) --backup --suffix .old ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf.dist
