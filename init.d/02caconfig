@@ -12,6 +12,7 @@ ICI_PUBLIC_URL=http://ca.example.com
 SOFTHSM_CONF=$ICI_CA_DIR/softhsm.conf
 export SOFTHSM_CONF
 EOC
+chmod 600 $ICI_CA_DIR/ca.config
 
 touch "${ICI_CA_DIR}/index.txt"
 
