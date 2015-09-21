@@ -18,6 +18,7 @@ Options:
                         Only used in the first form of this command.  The
 			form of NAME is explained below.
   --dn, --subject_dn    Synonyms for --subject.
+  --bits BITS           The created RSA key size in bits.
   --dns FQDN            Subject alternate name, DNS variant.
   --ip IP               Subject alternate name, IP address variant.
   --email EMAIL         Subject alternate name, EMAIL variant.
