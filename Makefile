@@ -46,7 +46,9 @@ $(CMDPAGES): Makefile ici $(CMDHELPS)
 		--output=$@ ./ici
 
 install: all
-	$(INSTALL) -D --backup --mode 640 ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
+	$(INSTALL_DATA) --backup --suffix .old ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf.dist
+	[ -f $(DESTDIR)$(etcdir)/ici/ici.conf ] || \
+		$(INSTALL_DATA) ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
 	for f in ici.1 $(CMDPAGES); do \
 		$(INSTALL) -D $$f $(DESTDIR)$(mandir)/man1/$$f; \
@@ -58,6 +60,13 @@ install: all
 		$(INSTALL) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
 	done
 	cp -pr public_html $(DESTDIR)/$(sharedir)/ici/public_html
+	@[ -f $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old ] && \
+	cmp -s $(DESTDIR)$(etcdir)/ici/ici.conf.dist $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old || \
+		{ echo "*****"; \
+		  echo "***** Distribution configuration has changed, you may need to edit"; \
+		  echo "***** $(DESTDIR)$(etcdir)/ici/ici.conf accordingly"; \
+		  echo "*****"; }
+
 clean:
 
 distclean:
