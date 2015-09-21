@@ -23,7 +23,7 @@ self=`basename $0`
 
 ICI_PRG=$0
 export ICI_PRG
-ICI_VERSION=1.8.90
+ICI_VERSION=1.9
 
 usage ()
 {
