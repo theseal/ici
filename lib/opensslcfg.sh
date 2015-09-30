@@ -23,6 +23,9 @@ case $ICI_TYPE in
    server)
       c_ext_tls_server >> $ICI_CONFIG
       ;;
+   ocsp)
+      c_ext_tls_ocsp >> $ICI_CONFIG
+      ;;
    peer)
       c_ext_tls_peer >> $ICI_CONFIG
       ;;
