@@ -86,9 +86,26 @@ cat<<EOC
 subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid
 EOC
+ICI_AUTHORITY_INFO_ACCESS=
+if [ ! -z "${ICI_PUBLIC_URL}" ]; then
+if [ ! -z "${ICI_AUTHORITY_INFO_ACCESS}" ]; then
+ICI_AUTHORITY_INFO_ACCESS="${ICI_AUTHORITY_INFO_ACCESS},"
+fi
+ICI_AUTHORITY_INFO_ACCESS="${ICI_AUTHORITY_INFO_ACCESS}caIssuers;URI:\"${ICI_PUBLIC_URL}/ca.crt\""
+fi
+if [ ! -z "${ICI_OCSP_URL}" ]; then
+if [ ! -z "${ICI_AUTHORITY_INFO_ACCESS}" ]; then
+ICI_AUTHORITY_INFO_ACCESS="${ICI_AUTHORITY_INFO_ACCESS},"
+fi
+ICI_AUTHORITY_INFO_ACCESS="${ICI_AUTHORITY_INFO_ACCESS}OCSP;URI:\"${ICI_OCSP_URL}\""
+fi
+if [ ! -z "${ICI_AUTHORITY_INFO_ACCESS}" ]; then
+cat<<EOC
+authorityInfoAccess     = ${ICI_AUTHORITY_INFO_ACCESS}"
+EOC
+fi
 if [ ! -z "${ICI_PUBLIC_URL}" ]; then
 cat<<EOC
-authorityInfoAccess     = caIssuers;URI:"${ICI_PUBLIC_URL}/ca.crt"
 crlDistributionPoints   = URI:"${ICI_PUBLIC_URL}/crl.pem"
 issuerAltName           = URI:"${ICI_PUBLIC_URL}"
 EOC
@@ -152,6 +169,16 @@ cat<<EOC
 basicConstraints        = CA:FALSE
 keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage        = serverAuth, clientAuth
+EOC
+}
+
+c_ext_tls_ocsp ()
+{
+cat<<EOC
+
+basicConstraints        = CA:FALSE
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = OCSPSigning
 EOC
 }
 
