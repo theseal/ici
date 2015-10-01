@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Certificate authority ${ICI_CA} initialised"
+echo
+echo "Please edit $ICI_CA_DIR/ca.config to suit your needs"
