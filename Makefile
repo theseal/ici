@@ -72,11 +72,11 @@ install: all
 		  echo "*****"; }
 
 clean:
+	rm -f ici.1 ici_req.1 $(CMDPAGES)
 
-distclean:
+distclean: clean
 
-maintainerclean:
-	rm -f ici.1 $(CMDPAGES)
+maintainerclean: distclean
 
 check:
 	@echo "no checks implemented - if it compiles, ship it!"
