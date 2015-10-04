@@ -20,7 +20,7 @@ self=`basename $0`
 
 ICI_REQ_CMD=$0
 export ICI_REQ_CMD
-ICI_REQ_VERSION=0.90
+ICI_REQ_VERSION=1.0
 
 usage ()
 {
