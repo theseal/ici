@@ -25,11 +25,14 @@ mandir=${prefix}/share/man
 INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
 INSTALL_DATA=$(INSTALL) -D --mode 0644
-PRG_DIR=gencrl.d gentoken.d help.d init.d issue.d lib publish.d root.d revoke.d
+PRG_DIR=gencrl.d gentoken.d help.d init.d issue.d publish.d root.d revoke.d
+LIB_DIR=lib
 DATA_DIR=public_html
 
-PRG=$$(find $(PRG_DIR) -type f -o -type l)
-DATA=$$(find $(DATA_DIR) -type f)
+PRG=$$(find $(PRG_DIR) \( -type f -o -type l \) -executable \! -name '*~') \
+    $$(find $(LIB_DIR) -type f)
+DATA=$$(find $(PRG_DIR) \( -type f -o -type l \) \! -executable \! -name '*~') \
+     $$(find $(DATA_DIR) -type f)
 
 all: manpages
 
@@ -61,7 +64,7 @@ install: all
 		$(INSTALL_EXE) $$f $(DESTDIR)$(sharedir)/ici/$$f; \
 	done
 	for f in $(DATA); do \
-		$(INSTALL) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
+		$(INSTALL_DATA) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
 	done
 	@[ -f $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old ] && \
 	cmp -s $(DESTDIR)$(etcdir)/ici/ici.conf.dist $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old || \
