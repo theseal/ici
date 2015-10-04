@@ -63,7 +63,6 @@ install: all
 	for f in $(DATA); do \
 		$(INSTALL) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
 	done
-	cp -pr public_html $(DESTDIR)/$(sharedir)/ici/public_html
 	@[ -f $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old ] && \
 	cmp -s $(DESTDIR)$(etcdir)/ici/ici.conf.dist $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old || \
 		{ echo "*****"; \
