@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION=1.0
+VERSION=1.9
 
 DESTDIR?=
 prefix=/usr
@@ -25,45 +25,60 @@ mandir=${prefix}/share/man
 INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
 INSTALL_DATA=$(INSTALL) -D --mode 0644
-PRG_DIR=gencrl.d gentoken.d init.d issue.d lib publish.d root.d revoke.d
+PRG_DIR=gencrl.d gentoken.d help.d init.d issue.d publish.d root.d revoke.d
+LIB_DIR=lib
 DATA_DIR=public_html
 
-PRG=$$(find $(PRG_DIR) -type f -o -type l)
-DATA=$$(find $(DATA_DIR) -type f)
+PRG=$$(find $(PRG_DIR) \( -type f -o -type l \) -executable \! -name '*~') \
+    $$(find $(LIB_DIR) -type f)
+DATA=$$(find $(PRG_DIR) \( -type f -o -type l \) \! -executable \! -name '*~') \
+     $$(find $(DATA_DIR) -type f)
 
 all: manpages
 
 CMDHELPS=$(wildcard *.d/help)
 CMDPAGES=$(patsubst %.d/help, ici-%.1, $(CMDHELPS))
-manpages: ici.1 $(CMDPAGES)
-ici.1: Makefile ici
+manpages: ici.1 ici_req.1 $(CMDPAGES)
+ici.1: ici Makefile
 	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
-		--no-info --no-discard-stderr --output=$@ ./ici
-$(CMDPAGES): Makefile ici $(CMDHELPS)
+		--no-info --no-discard-stderr --output=$@ ./$<
+ici_req.1: ici_req Makefile
+	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
+		--no-info --no-discard-stderr --output=$@ ./$<
+$(CMDPAGES): ici Makefile $(CMDHELPS)
 	ICI_CONF_DIR=util help2man --name="Imbecil Certificate Issuer" \
 		--no-info --no-discard-stderr \
 		--help-option="help `echo $@ | cut -f2 -d- | cut -f1 -d.`" \
-		--output=$@ ./ici
+		--output=$@ ./$<
 
 install: all
-	$(INSTALL) -D --backup --mode 640 ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
+	$(INSTALL_DATA) --backup --suffix .old ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf.dist
+	[ -f $(DESTDIR)$(etcdir)/ici/ici.conf ] || \
+		$(INSTALL_DATA) ici.conf $(DESTDIR)$(etcdir)/ici/ici.conf
 	$(INSTALL_EXE) ici $(DESTDIR)$(bindir)/ici
-	for f in ici.1 $(CMDPAGES); do \
+	$(INSTALL_EXE) ici_req $(DESTDIR)$(bindir)/ici_req
+	for f in ici.1 ici_req.1 $(CMDPAGES); do \
 		$(INSTALL) -D $$f $(DESTDIR)$(mandir)/man1/$$f; \
 	done
 	for f in $(PRG); do \
 		$(INSTALL_EXE) $$f $(DESTDIR)$(sharedir)/ici/$$f; \
 	done
 	for f in $(DATA); do \
-		$(INSTALL) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
+		$(INSTALL_DATA) -D $$f $(DESTDIR)/$(sharedir)/ici/$$f; \
 	done
-	cp -pr public_html $(DESTDIR)/$(sharedir)/ici/public_html
+	@[ -f $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old ] && \
+	cmp -s $(DESTDIR)$(etcdir)/ici/ici.conf.dist $(DESTDIR)$(etcdir)/ici/ici.conf.dist.old || \
+		{ echo "*****"; \
+		  echo "***** Distribution configuration has changed, you may need to edit"; \
+		  echo "***** $(DESTDIR)$(etcdir)/ici/ici.conf accordingly"; \
+		  echo "*****"; }
+
 clean:
+	rm -f ici.1 ici_req.1 $(CMDPAGES)
 
-distclean:
+distclean: clean
 
-maintainerclean:
-	rm -f ici.1 $(CMDPAGES)
+maintainerclean: distclean
 
 check:
 	@echo "no checks implemented - if it compiles, ship it!"

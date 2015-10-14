@@ -28,6 +28,9 @@ fi
             --type|-t)
                 ICI_TYPE="$2"
                 shift ;;
+	    --bits)
+		ICI_BITS="$2"
+		shift ;;
             --dns)
                 ICI_ALTNAMES="DNS:$2$altnamecomma$ICI_ALTNAMES"
                 shift ;;
@@ -58,4 +61,4 @@ fi
     done
 }
 
-export ICI_DAYS ICI_SERIAL ICI_SUBJECT_DN ICI_TYPE ICI_ALTNAMES ICI_COPY_EXTENSIONS
+export ICI_DAYS ICI_SERIAL ICI_SUBJECT_DN ICI_TYPE ICI_BITS ICI_ALTNAMES ICI_COPY_EXTENSIONS

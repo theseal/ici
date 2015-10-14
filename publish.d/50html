@@ -9,24 +9,28 @@ if [ -z "$1" ]; then
 fi
 
 PUBDIR="$1"
-mkdir -p "$PUBDIR"
-rsync -a "${ICI_LIB_DIR}/public_html/" "${PUBDIR}/"
+STAGE="/var/tmp/ici-stage.$$"
+
+mkdir -p "$STAGE"
+rsync -a "${ICI_LIB_DIR}/public_html/" "${STAGE}/"
 . "${ICI_LIB_DIR}/lib/html.sh"
 
-cp "${ICI_CA_DIR}/ca.crt" "${PUBDIR}"
+cp "${ICI_CA_DIR}/ca.crt" "${STAGE}"
 if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
-   cp "${ICI_CA_DIR}/crl.pem" "${PUBDIR}"
+   cp "${ICI_CA_DIR}/crl.pem" "${STAGE}"
 else
    echo "*** WARNING - no CRL"
 fi
 
 (
-html_index_head > "${PUBDIR}/index.html"
+html_index_head > "${STAGE}/index.html"
 while read -r status date serial foo dn; do
-   html_cert_file "$status" "$date" "$serial" "$foo" "$dn" > "${PUBDIR}/${serial}.html"
-   html_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${PUBDIR}/index.html"
-   cp "${ICI_CA_DIR}/certs/${serial}.pem" "${PUBDIR}"
+   html_cert_file "$status" "$date" "$serial" "$foo" "$dn" > "${STAGE}/${serial}.html"
+   html_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${STAGE}/index.html"
+   cp "${ICI_CA_DIR}/certs/${serial}.pem" "${STAGE}"
 done
-html_index_foot >> "${PUBDIR}/index.html"
+html_index_foot >> "${STAGE}/index.html"
 ) < "${ICI_CA_DIR}/index.txt"
 
+rsync -a "${STAGE}/" "${PUBDIR}/"
+rm -rf "${STAGE}/"
