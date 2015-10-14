@@ -1,3 +1,52 @@
+ici (1.8-1ubuntu2) trusty; urgency=medium
+
+  [ Richard Levitte ]
+  * Do not shift here, there's another shift further down
+
+  [ Richard Levitte ]
+  * Do not use trap for an error message regarding unknown command
+  * Lay the ground work for an extended help system
+  * Add version number and version information output
+  * Extend the help for 'ici'
+  * Add description and help for 'ici init'
+  * Add description and help for 'ici gentoken'
+  * Add description and help for 'ici root'
+  * Add description and help for 'ici issue'
+  * Add description and help for 'ici revoke'
+  * Add description and help for 'ici gencrl'
+  * Add description and help for 'ici publish'
+  * Add the internal variable ICI_PRG as help for commands
+  * Have some commands use the help system when arguments are missing
+  * Small bug in call to find
+  * Make 'ici help' its own proper command
+  * Add a HACKING document
+  * Correct the mixup between ICI_CMD and ICI_PRG
+  * Stop ici.conf from changing ICI_CONF_DIR or ICI_CONF
+  * Silently add a debug option
+  * Add better control of the CA and subcommand arguments
+  * Add a missing shift
+  * Include help.d among the commands to install
+  * Do not overwrite an already installed ici.conf!
+  * Add a (undocumented) debugging option to ici_req
+  * Keep the order of the subject altnames given on the command line
+  * Add help2man friendly documentation to ici_req, and produce ici_req.1
+  * Install the documentation for ici_req as well
+  * ignore ALL manpages
+  * Security fix: protect ca.config
+  * Add --bits to the root subcommand
+  * Install ici_req
+  * Change the publis command to allow remote publishing
+  * Have ici-init tell the user to edit ca.config
+  * Add the possibility to issue a cert for OCSP
+  * Bump version to 1.9
+  * public_html is already installed, don't copy it one more time
+  * Fine-tune the installation permissions
+  * Have the clean targets follow the GNU standards more closely
+
+  [ Leif Johansson ]
+
+ -- Leif Johansson <leifj@sunet.se>  Wed, 14 Oct 2015 15:46:42 +0200
+
 ici (1.8-1ubuntu1) trusty; urgency=medium
 
   [ Leif Johansson ]
