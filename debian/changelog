@@ -1,4 +1,4 @@
-ici (1.8-1ubuntu2) trusty; urgency=medium
+ici (1.9-1ubuntu1) trusty; urgency=medium
 
   [ Richard Levitte ]
   * Do not shift here, there's another shift further down
