@@ -14,7 +14,6 @@ STAGE="/var/tmp/ici-stage.$$"
 mkdir -p "$STAGE"
 rsync -a "${ICI_LIB_DIR}/public_html/" "${STAGE}/"
 . "${ICI_LIB_DIR}/lib/html.sh"
-. "${ICI_LIB_DIR}/lib/csv.sh"
 
 cp "${ICI_CA_DIR}/ca.crt" "${STAGE}"
 if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
@@ -28,7 +27,6 @@ html_index_head > "${STAGE}/index.html"
 while read -r status date serial foo dn; do
    html_cert_file "$status" "$date" "$serial" "$foo" "$dn" > "${STAGE}/${serial}.html"
    html_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${STAGE}/index.html"
-   csv_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${STAGE}/index.csv"
    cp "${ICI_CA_DIR}/certs/${serial}.pem" "${STAGE}"
 done
 html_index_foot >> "${STAGE}/index.html"
