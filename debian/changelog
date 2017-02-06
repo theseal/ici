@@ -3,7 +3,7 @@ ici (1.10-1ubuntu1) trusty; urgency=medium
   [ Leif Johansson ]
   * generate a CSV file in the CA public html directory to enable scripts
 
- -- Leif Johansson <leifj@trurl>  Mon, 06 Feb 2017 13:35:26 +0100
+ -- Leif Johansson <leifj@sunet.se>  Mon, 06 Feb 2017 13:35:26 +0100
 
 ici (1.9-1ubuntu1) trusty; urgency=medium
 
