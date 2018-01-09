@@ -3,7 +3,7 @@ Usage: ici [GLOBALOPTIONS] CA issue [OPTIONS] [--] CSR
 
 Issue and sign a certificate from a certificate request CSR, or a
 certificate from each CSR (file with names ending with .csr) in DIRECTORY.
-The certificate and key for the certificate aithority CA are used
+The certificate and key for the certificate authority CA are used
 to sign the issued certificate(s).
 
 Options:
