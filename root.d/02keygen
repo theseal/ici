@@ -3,4 +3,4 @@
 . $ICI_CA_DIR/ca.config
 
 $ICI_PKCS11_TOOL --module=$ICI_PKCS11 -l --keypairgen --pin ${ICI_PKCS11_PIN} \
-  --key-type rsa:${ICI_BITS:-4096} --slot ${ICI_CA_KEY_SLOT} --id ${ICI_CA_KEY_ID}
+  --key-type rsa:${ICI_BITS:-4096} --token-label ${ICI_CA}_key --id ${ICI_CA_KEY_ID}
