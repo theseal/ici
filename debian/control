@@ -10,7 +10,7 @@ Vcs-Git: git://github.com/leifj/ici.git
 
 Package: ici
 Architecture: all
-Depends: ${misc:Depends}, openssl, opensc, libengine-pkcs11-openssl
+Depends: ${misc:Depends}, openssl, opensc, libengine-pkcs11-openssl1.1
 Recommends: softhsm
 Description: the imbecile certificate issuer
  ici is a refactor of the CSP package with support for PKCS#11
