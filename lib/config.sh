@@ -17,7 +17,7 @@ init = 0
 EOC
 }
 
-c_req () 
+c_req ()
 {
 cat<<EOC
 
@@ -95,7 +95,7 @@ ICI_AUTHORITY_INFO_ACCESS="${ICI_AUTHORITY_INFO_ACCESS}OCSP;URI:\"${ICI_OCSP_URL
 fi
 if [ ! -z "${ICI_AUTHORITY_INFO_ACCESS}" ]; then
 cat<<EOC
-authorityInfoAccess     = ${ICI_AUTHORITY_INFO_ACCESS}"
+authorityInfoAccess     = ${ICI_AUTHORITY_INFO_ACCESS}
 EOC
 fi
 if [ ! -z "${ICI_PUBLIC_URL}" ]; then
