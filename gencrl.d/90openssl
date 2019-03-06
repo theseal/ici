@@ -14,5 +14,5 @@ fi
 
 $ICI_OPENSSL ca -gencrl -notext -batch \
    -config $ICI_CONFIG -engine pkcs11 -crlexts crl_extensions \
-   -keyfile "${ICI_CRL_KEY_SLOT}:${ICI_CRL_KEY_ID}" -keyform engine \
+   -keyfile "pkcs11:token=${ICI_CA}_key" -keyform engine \
    -crldays ${ICI_DAYS} -out "${ICI_CA_DIR}/crl.pem"
