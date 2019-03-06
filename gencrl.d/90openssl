@@ -4,14 +4,6 @@
 
 mkdir -p $ICI_CA_DIR/certs
 
-if [ -z "${ICI_CRL_KEY_SLOT}" ]; then
-   ICI_CRL_KEY_SLOT="${ICI_CA_KEY_SLOT}"
-fi
-
-if [ -z "${ICI_CRL_KEY_ID}" ]; then
-   ICI_CRL_KEY_ID="${ICI_CA_KEY_ID}"
-fi
-
 $ICI_OPENSSL ca -gencrl -notext -batch \
    -config $ICI_CONFIG -engine pkcs11 -crlexts crl_extensions \
    -keyfile "pkcs11:token=${ICI_CA}_key" -keyform engine \
