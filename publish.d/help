@@ -1,7 +1,7 @@
 Usage: ici [OPTIONS] publish module OUTDIR
 
-Pusblishes the information that the public needs to know about this
-certificate authority, such  as the root certificate, the certificate
+Publishes the information that the public needs to know about this
+certificate authority, such as the root certificate, the certificate
 revokation list and the list of issued certificates.
 
 Modules currently implemented: 'html' and 'git'
@@ -9,7 +9,7 @@ Modules currently implemented: 'html' and 'git'
 OUTDIR must be given and is the directory in which the information is
 stored as a web page/Git repository.
 
-You will have to make sure that your web server knows to server OUTDIR.
+You will have to make sure that your web server knows to serve OUTDIR.
 
 *Notes*
 You should generate the certificate revokation list before running this
