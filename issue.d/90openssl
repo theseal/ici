@@ -15,7 +15,7 @@ fi
 cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16 > $ICI_CA_DIR/serial
 $ICI_OPENSSL ca -notext -batch $nameopt \
    -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
-   -keyfile "${ICI_CA_KEY_SLOT}:${ICI_CA_KEY_ID}" -keyform engine \
+   -keyfile "pkcs11:token=${ICI_CA}_key" -keyform engine \
    -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
 }
 
