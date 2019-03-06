@@ -5,17 +5,11 @@ cat<<EOC
 openssl_conf = openssl_init
 [openssl_init]
 engines = engines_section
-oid_section = oids
-
-[oids]
-domainComponent=0.9.2342.19200300.100.1.25
-
 [engines_section]
 pkcs11 = pkcs11_section
 
 [pkcs11_section]
 engine_id = pkcs11
-dynamic_path = /usr/lib/engines/engine_pkcs11.so
 MODULE_PATH = ${ICI_PKCS11}
 PIN = ${ICI_PKCS11_PIN}
 init = 0
