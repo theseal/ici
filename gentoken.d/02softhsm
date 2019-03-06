@@ -6,5 +6,5 @@ cat>$ICI_CA_DIR/softhsm.conf<<EOC
 0: $ICI_CA_DIR/softhsm.db
 EOC
 
-softhsm --slot "${ICI_CA_KEY_SLOT}" --label "${ICI_CA}_key" \
+softhsm2-util --slot "${ICI_CA_KEY_SLOT}" --label "${ICI_CA}_key" \
    --init-token --pin "${ICI_PKCS11_PIN}" --so-pin "${ICI_PKCS11_PIN}"
