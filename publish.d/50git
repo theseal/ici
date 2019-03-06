@@ -1,0 +1,76 @@
+#!/bin/sh
+
+#set -x
+
+. $ICI_CA_DIR/ca.config
+
+git_commit_cert ()
+{
+    file="$1"
+    host="$2"
+
+    fp_sha1=`$ICI_OPENSSL x509 -noout -fingerprint -sha1 < "$file" | awk -F= '{print $NF}'`
+    fp_sha256=`$ICI_OPENSSL x509 -noout -fingerprint -sha256 < "$file" | awk -F= '{print $NF}'`
+    not_before=`$ICI_OPENSSL x509 -noout -startdate < "$file" | awk -F= '{print $NF}'`
+    not_after=`$ICI_OPENSSL x509 -noout -enddate < "$file" | awk -F= '{print $NF}'`
+    subject=`$ICI_OPENSSL x509 -noout -subject < "$file" | sed -e 's/^subject[= ]*//'`
+
+    msg=`echo "${host} (${subject})\n\n  SHA-1 ${fp_sha1}\n  SHA-256 ${fp_sha256}\n\n  Valid until ${not_after}"`
+
+    if [ "x$ICI_VERBOSE" = "xy" ]; then
+	echo ""
+	echo "$0: Committing certificate for ${host}:"
+	echo "$msg"
+    fi
+
+    git add "$file"
+    git status --porcelain "$file" | grep "`basename $file`" > /dev/null && git commit -m "$msg" "$file"
+}
+
+git_commit_ca ()
+{
+    git_commit_cert "$1" "CA"
+}
+
+git_commit_crl ()
+{
+    file="$1"
+
+    git add "$file"
+    git status --porcelain "$file" | grep "$file" > /dev/null && git commit -m "Updated CRL" "$file"
+}
+
+if [ "x$1" != "xgit" ]; then
+    exit 0
+fi
+shift
+
+if [ -z "$1" ]; then
+   echo "Error: publish git: Missing arguments" >&2
+   ${ICI_PRG} help publish
+   exit 1
+fi
+
+GITREPO="$1"
+
+if [ ! -d "${GITREPO}/.git" ]; then
+   echo "Error: publish git: Specified directory is not a Git repository" >&2
+   exit 1
+fi
+
+cp "${ICI_CA_DIR}/ca.crt" "${GITREPO}"
+git_commit_ca "${GITREPO}/ca.crt"
+if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
+   cp "${ICI_CA_DIR}/crl.pem" "${GITREPO}"
+   git_commit_crl "${GITREPO}/ca.crt"
+else
+   echo "*** WARNING - no CRL"
+fi
+
+for host in `grep CN= "${ICI_CA_DIR}/index.txt" | sed -e 's/.*CN=//' | sort | uniq`; do
+    grep "CN=${host}$" "${ICI_CA_DIR}/index.txt" | sort -k 2 -n | tail -1 | \
+	while read -r status date serial foo dn; do
+	    cp "${ICI_CA_DIR}/certs/${serial}.pem" "${GITREPO}/${host}.pem"
+	    git_commit_cert "${GITREPO}/${host}.pem" $host
+	done
+done

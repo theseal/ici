@@ -2,8 +2,13 @@
 
 . $ICI_CA_DIR/ca.config
 
+if [ "x$1" != "xhtml" ]; then
+    exit 0
+fi
+shift
+
 if [ -z "$1" ]; then
-   echo "Error: publish: Missing arguments" >&2
+   echo "Error: publish html: Missing arguments" >&2
    ${ICI_PRG} help publish
    exit 1
 fi
