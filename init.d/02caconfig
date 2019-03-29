@@ -3,8 +3,8 @@
 conf="${ICI_CA_DIR}/ca.config"
 if [ ! -f "${conf}" ]; then
     cat>"${conf}"<<EOC
+ICI_CA_KEY_TOKEN=ici-${ICI_CA_NAME}
 ICI_CA_KEY_ID=a1a2
-ICI_CA_KEY_SLOT=0
 ICI_PKCS11=/usr/lib/softhsm/libsofthsm2.so
 ICI_PKCS11_PIN=secret
 ICI_MD=sha256
