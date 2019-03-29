@@ -2,9 +2,9 @@
 
 . $ICI_CA_DIR/ca.config
 
-cat>$ICI_CA_DIR/softhsm.conf<<EOC
-0: $ICI_CA_DIR/softhsm.db
-EOC
+#cat>$ICI_CA_DIR/softhsm.conf<<EOC
+#0: $ICI_CA_DIR/softhsm.db
+#EOC
 
 
 # XXX using ICI_PKCS11_PIN for both --pin and --so-pin
