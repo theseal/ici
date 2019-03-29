@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cat>$ICI_CA_DIR/ca.config<<EOC
+conf="${ICI_CA_DIR}/ca.config"
+if [ ! -f "${conf}" ]; then
+    cat>"${conf}"<<EOC
 ICI_CA_KEY_ID=a1a2
 ICI_CA_KEY_SLOT=0
 ICI_PKCS11=/usr/lib/softhsm/libsofthsm2.so
@@ -14,16 +16,24 @@ ICI_OCSP_URL=http://ocsp.example.com
 SOFTHSM_CONF=$ICI_CA_DIR/softhsm.conf
 export SOFTHSM_CONF
 EOC
-chmod 600 $ICI_CA_DIR/ca.config
+else
+    echo "$0: File '${conf}' already exists, not overwriting"
+fi
+chmod 600 "${conf}"
 
 touch "${ICI_CA_DIR}/index.txt"
 
-cat>$ICI_CA_DIR/name.policy<<EOC
+policy="${ICI_CA_DIR}/name.policy"
+if [ ! -f "${policy}" ]; then
+    cat>"${policy}"<<EOC
 [policy]
-countryName 	       = match 
+countryName 	       = match
 stateOrProvinceName    = optional
 organizationName       = supplied
 organizationalUnitName = optional
 commonName             = supplied
 emailAddress           = optional
 EOC
+else
+    echo "$0: File '${policy}' already exists, not overwriting"
+fi
