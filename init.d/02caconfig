@@ -15,6 +15,11 @@ ICI_OCSP_URL=http://ocsp.example.com
 # remove to disable softhsm
 SOFTHSM_CONF=$ICI_CA_DIR/softhsm.conf
 export SOFTHSM_CONF
+
+# enable these lines to use PKCS#11 spy
+#PKCS11SPY=${ICI_PKCS11}
+#ICI_PKCS11=/usr/lib/x86_64-linux-gnu/pkcs11/pkcs11-spy.so
+#export PKCS11SPY
 EOC
 else
     echo "$0: File '${conf}' already exists, not overwriting"
