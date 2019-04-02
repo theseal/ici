@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "x${ICI_SUBJECT_DN}" = "x" ]; then
+    echo "$0: ICI_SUBJECT_DN not set (try --subject/--subject_dn/--dn/-n)"
+    exit 1
+fi
+
+exit 0

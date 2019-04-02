@@ -3,11 +3,6 @@
 . $ICI_LIB_DIR/lib/config.sh
 . $ICI_CA_DIR/ca.config
 
-if [ "x${ICI_SUBJECT_DN}" = "x" ]; then
-    echo "$0: ICI_SUBJECT_DN not set (try --subject/--subject_dn/--dn/-n)"
-    exit 1
-fi
-
 c_init  > $ICI_CONFIG
 c_req  >> $ICI_CONFIG
 c_dn   >> $ICI_CONFIG
