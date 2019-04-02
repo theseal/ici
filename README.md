@@ -40,7 +40,7 @@ or use the debian package.
 Get Started
 -----------
 
-I wrote CSP before I understood the value of using tokens to abstract key management so CSP had very poor support for HSMs and other security tokens. By contrast ici only works with PKCS11-based tokens. You can use SoftHSM if you insist on keeping your keys on disk and the example below uses SoftHSM for simplicity. 
+I wrote CSP before I understood the value of using tokens to abstract key management so CSP had very poor support for HSMs and other security tokens. By contrast ici only works with PKCS11-based tokens. You can use SoftHSM if you insist on keeping your keys on disk and the example below uses SoftHSM for simplicity.
 
 1. Create a CA
 
@@ -49,7 +49,7 @@ First take a look at /etc/ici/ici.conf to verify that the defaults look ok to yo
 ```
 # vi /etc/ici/ici.conf
 # ici myca create
-# ici myca gentoken
+# ici myca init
 # vi /var/lib/ici/myca/ca.config
 # vi /var/lib/ici/myca/name.policy
 # vi /var/lib/ici/myca/cert.policy
@@ -78,7 +78,7 @@ Here www.example.com.csr is a standard PEM-encoded PKCS#10. Creating it is left 
 
 ```
 # ici myca gencrl
-# ici myca publish /var/www/html/
+# ici myca publish html /var/www/html/
 ```
 
 In a production environment you'll probably not keep your public web repository on the same machine as the CA.
