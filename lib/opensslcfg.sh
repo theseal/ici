@@ -35,6 +35,8 @@ case $ICI_TYPE in
 esac
 c_ext_policy >> $ICI_CONFIG
 
-if [ "x$ICI_VERBOSE" = "xy" ]; then
+if [ "x$ICI_DEBUG" = "xy" ]; then
+   echo "$0: OpenSSL config generated:"
    cat $ICI_CONFIG
+   echo "---"
 fi
