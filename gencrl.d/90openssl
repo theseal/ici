@@ -6,5 +6,5 @@ mkdir -p $ICI_CA_DIR/certs
 
 $ICI_OPENSSL ca -gencrl -notext -batch \
    -config $ICI_CONFIG -engine pkcs11 -crlexts crl_extensions \
-   -keyfile "pkcs11:token=${ICI_CA}_key" -keyform engine \
+   -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
    -crldays ${ICI_DAYS} -out "${ICI_CA_DIR}/crl.pem"

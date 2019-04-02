@@ -4,5 +4,5 @@
 
 $ICI_OPENSSL req -new -x509 \
    -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
-   -key "pkcs11:token=${ICI_CA}_key" -keyform engine \
+   -key "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
    -days ${ICI_DAYS:-3650} -set_serial 0 -out $ICI_CA_DIR/ca.crt

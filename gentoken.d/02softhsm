@@ -2,17 +2,10 @@
 
 . $ICI_CA_DIR/ca.config
 
-#cat>$ICI_CA_DIR/softhsm.conf<<EOC
-#0: $ICI_CA_DIR/softhsm.db
-#EOC
-
-
-# XXX using ICI_PKCS11_PIN for both --pin and --so-pin
-
-if [ "x`softhsm2-util --show-slots | grep \"Label:\\s*${ICI_CA_NAME}_key\"`" = "x" ]; then
-    softhsm2-util --token "${ICI_CA_KEY_TOKEN}" --label "${ICI_CA}_key" \
-		  --init-token --pin "${ICI_PKCS11_PIN}" --so-pin "${ICI_PKCS11_PIN}" \
+if [ "x`softhsm2-util --show-slots | grep \"Label:\\s*${ICI_CA_KEY_TOKEN}\"`" = "x" ]; then
+    softhsm2-util --token "${ICI_CA_KEY_TOKEN}" --label "${ICI_CA_KEY_TOKEN}" \
+		  --init-token --pin "${ICI_PKCS11_PIN}" --so-pin "${ICI_PKCS11_SOPIN}" \
 		  --free
 else
-    echo "$0: SoftHSM2 already contains an object with label '${ICI_CA}_key'"
+    echo "$0: SoftHSM2 already contains token with label '${ICI_CA_KEY_TOKEN}'"
 fi
