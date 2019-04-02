@@ -13,8 +13,8 @@ ICI_PUBLIC_URL=http://ca.example.com
 ICI_OCSP_URL=http://ocsp.example.com
 
 # remove to disable softhsm
-SOFTHSM_CONF=$ICI_CA_DIR/softhsm.conf
-export SOFTHSM_CONF
+SOFTHSM2_CONF="$ICI_CA_DIR/softhsm/softhsm.conf"
+export SOFTHSM2_CONF
 
 # enable these lines to use PKCS#11 spy
 #PKCS11SPY=${ICI_PKCS11}

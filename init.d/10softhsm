@@ -1,0 +1,26 @@
+#!/bin/sh
+
+. "${ICI_CA_DIR}/ca.config"
+
+if [ "x${SOFTHSM2_CONF}" = "x" ]; then
+    test "x$ICI_VERBOSE" = "xy" && echo "$0: SOFTHSM2_CONF not set - exiting"
+    exit 0
+fi
+
+if [ ! -f "${SOFTHSM2_CONF}" ]; then
+    test "x$ICI_VERBOSE" = "xy" && echo "$0: SoftHSM2 config file ${SOFTHSM2_CONF} doesn't exist - creating it"
+
+    TOKENDIR="${ICI_CA_ROOT}/${ICI_CA_NAME}/softhsm/tokens"
+    mkdir -p "${TOKENDIR}"
+    cat > "${SOFTHSM2_CONF}" <<EOF
+# SoftHSM v2 configuration file
+
+directories.tokendir = ${TOKENDIR}
+objectstore.backend = file
+
+# ERROR, WARNING, INFO, DEBUG
+log.level = INFO
+EOF
+else
+    test "x$ICI_VERBOSE" = "xy" && echo "$0: SoftHSM2 config file ${SOFTHSM2_CONF} already exist - not overwriting it"
+fi
