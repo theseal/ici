@@ -4,7 +4,6 @@
 
 mkdir -p $ICI_CA_DIR/certs
 
-
 process_csr ()
 {
     csr=$1
@@ -21,11 +20,15 @@ process_csr ()
 	echo ""
     fi
 
-    cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16 > $ICI_CA_DIR/serial
+    serial=`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16`
+    echo $serial > $ICI_CA_DIR/serial
     $ICI_OPENSSL ca -notext -batch $nameopt \
 		 -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
 		 -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
 		 -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
+
+    # Remember mapping between input filename and serial, for use in publish.d/50req-resp
+    echo "${serial};${csr}" >> $ICI_CA_DIR/serial_db.txt
 
     if [ "x$ICI_VERBOSE" = "xy" ]; then
 	echo ""
