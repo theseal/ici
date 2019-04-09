@@ -53,5 +53,7 @@ if [[ ! -d "${outgitdir}" ]]; then
 fi
 
 echo ""
-echo "ICI in Docker set up successfully"
+echo "ICI in Docker set up successfully, CA certificate:"
 echo ""
+cat "${ICI_CA_ROOT}/${ICI_CA_NAME}/ca.crt"
+

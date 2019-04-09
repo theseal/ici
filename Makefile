@@ -113,6 +113,7 @@ docker_build: dist
 docker_init_ca:
 	docker run --rm -it \
 		-e ICI_CA_NAME=$(DOCKER_ICI_CA_NAME) \
+		-e ICI_CA_KEY_TYPE=EC:prime256v1 \
 		-v $(DOCKER_ICI_ROOT):/var/lib/ici \
 		-v /dev/log:/dev/log \
 		'ici_ca:latest' -- /init_softhsm_ca.sh

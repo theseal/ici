@@ -6,6 +6,7 @@ if [ ! -f "${conf}" ]; then
 ICI_CA_KEY_TOKEN="ici-${ICI_CA_NAME}"
 ICI_CA_KEY_LABEL="${ICI_CA_NAME}_key"
 ICI_CA_KEY_ID=a1a2
+ICI_CA_KEY_TYPE=${ICI_CA_KEY_TYPE-'rsa:4096'}
 ICI_PKCS11=/usr/lib/softhsm/libsofthsm2.so
 ICI_PKCS11_PIN=secret
 ICI_PKCS11_SOPIN=supersecret
