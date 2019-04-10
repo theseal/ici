@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -x
+
+. $ICI_CA_DIR/ca.config
+
+if [ "x$ICI_CA_KEY_TYPE" = "x" ]; then
+    ICI_CA_KEY_TYPE="rsa:${ICI_BITS:-4096}"
+fi
+
+$ICI_PKCS11_TOOL --module=$ICI_PKCS11 -l --keypairgen --pin ${ICI_PKCS11_PIN} \
+		 --key-type "${ICI_CA_KEY_TYPE}" --token-label ${ICI_CA_KEY_TOKEN} \
+		 --label ${ICI_CA_KEY_LABEL} --id ${ICI_CA_KEY_ID}

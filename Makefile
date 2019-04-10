@@ -34,6 +34,10 @@ PRG=$$(find $(PRG_DIR) \( -type f -o -type l \) -executable \! -name '*~') \
 DATA=$$(find $(PRG_DIR) \( -type f -o -type l \) \! -executable \! -name '*~') \
      $$(find $(DATA_DIR) -type f)
 
+DOCKER_ICI_CA_NAME ?= example
+DOCKER_ICI_ROOT    ?= /var/lib/ici
+DOCKER_ICI_RUN     ?= /inotify_issue_and_publish.sh
+
 all: manpages
 
 CMDHELPS=$(wildcard *.d/help)
@@ -102,3 +106,22 @@ release: distcheck
 	gpg --detach-sign ici-$(VERSION).tar.gz
 	gpg --verify ici-$(VERSION).tar.gz.sig
 	cp ici-$(VERSION).tar.gz ici-$(VERSION).tar.gz.sig ../releases/ici/
+
+docker_build: dist
+	docker build --build-arg VERSION=$(VERSION) . -t 'ici_ca:latest'
+
+docker_init_ca:
+	docker run --rm -it \
+		-e ICI_CA_NAME=$(DOCKER_ICI_CA_NAME) \
+		-e ICI_CA_KEY_TYPE=EC:prime256v1 \
+		-v $(DOCKER_ICI_ROOT):/var/lib/ici \
+		-v /dev/log:/dev/log \
+		'ici_ca:latest' -- /init_softhsm_ca.sh
+
+docker_run:
+	docker run --rm -it \
+		-e ICI_CA_NAME=$(DOCKER_ICI_CA_NAME) \
+		-v $(DOCKER_ICI_ROOT):/var/lib/ici \
+		'ici_ca:latest' -- $(DOCKER_ICI_RUN)
+
+.PHONY: docker_build docker_run

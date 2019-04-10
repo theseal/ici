@@ -58,6 +58,8 @@ if [ ! -d "${GITREPO}/.git" ]; then
    exit 1
 fi
 
+cd "${GITREPO}"
+
 cp "${ICI_CA_DIR}/ca.crt" "${GITREPO}"
 git_commit_ca "${GITREPO}/ca.crt"
 if [ -f "${ICI_CA_DIR}/crl.pem" ]; then
