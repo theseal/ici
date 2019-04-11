@@ -40,20 +40,33 @@ EOC
 	done
     fi
 
-    set +x
     serial=`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16`
     echo $serial > $ICI_CA_DIR/serial
     $ICI_OPENSSL ca -notext -batch $nameopt \
 		 -config $CSR_ICI_CONFIG -engine pkcs11 -extensions extensions \
 		 -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
 		 -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
+    ca_status=$?
 
-    # Remember mapping between input filename and serial, for use in publish.d/50req-resp
-    echo "${serial};${csr}" >> $ICI_CA_DIR/serial_db.txt
+    if [ $ca_status -ne 0 ]; then
+	echo "$0: FAILED issuing certificate for CSR ${csr}"
+	if [ "x$ICI_VERBOSE" != "xy" ]; then
+	    # Print CSR if it hasn't already been printed above (which it has, if running verbose)
+	    openssl req -text < $csr
+	    if [ "x$ICI_VERBOSE" = "xy" -o "x$ICI_DEBUG" = "xy" ]; then
+		echo "OpenSSL config file used to process CSR:"
+		cat $CSR_ICI_CONFIG
+	    fi
+	fi
+    else
 
-    if [ "x$ICI_VERBOSE" = "xy" ]; then
-	echo ""
-	echo "$0: Output file: $ICI_CA_DIR/certs/`cat $ICI_CA_DIR/serial`.pem"
+	# Remember mapping between input filename and serial, for use in publish.d/50req-resp
+	echo "${serial};${csr}" >> $ICI_CA_DIR/serial_db.txt
+
+	if [ "x$ICI_VERBOSE" = "xy" ]; then
+	    echo ""
+	    echo "$0: Output file: ${ICI_CA_DIR}/certs/${serial}.pem"
+	fi
     fi
 
     rm -f $CSR_ICI_CONFIG
@@ -66,8 +79,8 @@ if [ -d "$1" ]; then
       rfp=`$ICI_OPENSSL req < $f | sha256sum | awk '{print $1}'`
       if [ "x$rfp" != "x" ]; then
          grep -q $rfp $done_file || {
-            process_csr "$f"
-            echo "$rfp:$f:`date`" >> $done_file
+             process_csr "$f"
+	     echo "$rfp:$f:`date`" >> $done_file
          }
       fi
    done
