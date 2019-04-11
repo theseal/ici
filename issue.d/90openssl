@@ -20,10 +20,31 @@ process_csr ()
 	echo ""
     fi
 
+    CSR_ICI_CONFIG=`mktemp`
+    cat $ICI_CONFIG > $CSR_ICI_CONFIG
+    cat >> $CSR_ICI_CONFIG <<EOC
+
+# Per-CSR configuration below
+EOC
+
+    if [ "x${ICI_CSR_ALTNAMES}" != "x" ]; then
+	# Append subjectAltNames from CSR to the CSR_ICI_CONFIG
+	dns_names="`openssl req -in "${csr}" -text -noout | grep DNS: | sed -e 's/DNS://g' -e 's/, / /g' -e 's/[^0-9a-zA-Z\. -]//g' | sort | uniq`"
+	echo "$0: DNS subjectAltNames in CSR: ${dns_names}"
+
+	echo "[ ${ICI_CSR_ALTNAMES} ]" >> $CSR_ICI_CONFIG
+	i=1
+	for n in $dns_names; do
+            echo "DNS.${i} = ${n}" >> $CSR_ICI_CONFIG
+	    i=`expr $i + 1`
+	done
+    fi
+
+    set +x
     serial=`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16`
     echo $serial > $ICI_CA_DIR/serial
     $ICI_OPENSSL ca -notext -batch $nameopt \
-		 -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
+		 -config $CSR_ICI_CONFIG -engine pkcs11 -extensions extensions \
 		 -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
 		 -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
 
@@ -34,6 +55,8 @@ process_csr ()
 	echo ""
 	echo "$0: Output file: $ICI_CA_DIR/certs/`cat $ICI_CA_DIR/serial`.pem"
     fi
+
+    rm -f $CSR_ICI_CONFIG
 }
 
 if [ -d "$1" ]; then
