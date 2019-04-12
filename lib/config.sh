@@ -106,7 +106,7 @@ EOC
 fi
 if [ ! -z "$ICI_ALTNAMES" ]; then
 cat<<EOC
-subjctAltNames          = ${ICI_ALTNAMES}
+subjectAltName          = ${ICI_ALTNAMES}
 EOC
 fi
 if [ -f "${ICI_CA_DIR}/ca.policy" ]; then

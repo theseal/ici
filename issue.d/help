@@ -28,3 +28,11 @@ is the /NAME=VAL for, for example like this:
 
   --dn "/C=SE/O=Example Company AB/CN=example.com"
 
+*subjectAltNames*
+subjectAltNames can optionally be copied from the CSR by setting two options
+in ca.config:
+
+  ICI_CSR_ALTNAMES='req_subject_alt_names'
+  ICI_ALTNAMES="@${ICI_CSR_ALTNAMES}"
+
+(this is currently limited to DNS subjectAltNames, other kinds will be ignored).
