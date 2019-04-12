@@ -6,30 +6,34 @@ mkdir -p $ICI_CA_DIR/certs
 
 process_csr ()
 {
-csr=$1
-name=$2
-nameopt=""
-if [ ! -z "$name" ]; then
-   nameopt="-subj \"$name\""
-fi
+    csr=$1
+    name=$2
+    nameopt=""
+    if [ ! -z "$name" ]; then
+	nameopt="-subj \"$name\""
+    fi
 
-if [ "x$ICI_VERBOSE" = "xy" ]; then
-    echo ""
-    echo "$0: Processing CSR '$csr' for name '$name', nameopt '$nameopt'"
-    openssl req -text < $csr
-    echo ""
-fi
+    if [ "x$ICI_VERBOSE" = "xy" ]; then
+	echo ""
+	echo "$0: Processing CSR '$csr' for name '$name', nameopt '$nameopt'"
+	openssl req -text < $csr
+	echo ""
+    fi
 
-cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16 > $ICI_CA_DIR/serial
-$ICI_OPENSSL ca -notext -batch $nameopt \
-   -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
-   -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
-   -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
+    serial=`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 16`
+    echo $serial > $ICI_CA_DIR/serial
+    $ICI_OPENSSL ca -notext -batch $nameopt \
+		 -config $ICI_CONFIG -engine pkcs11 -extensions extensions \
+		 -keyfile "pkcs11:token=${ICI_CA_KEY_TOKEN}" -keyform engine \
+		 -days ${ICI_DAYS} -outdir $ICI_CA_DIR/certs -in "$csr"
 
-if [ "x$ICI_VERBOSE" = "xy" ]; then
-    echo ""
-    echo "$0: Output file: $ICI_CA_DIR/certs/`cat $ICI_CA_DIR/serial`.pem"
-fi
+    # Remember mapping between input filename and serial, for use in publish.d/50req-resp
+    echo "${serial};${csr}" >> $ICI_CA_DIR/serial_db.txt
+
+    if [ "x$ICI_VERBOSE" = "xy" ]; then
+	echo ""
+	echo "$0: Output file: $ICI_CA_DIR/certs/`cat $ICI_CA_DIR/serial`.pem"
+    fi
 }
 
 if [ -d "$1" ]; then

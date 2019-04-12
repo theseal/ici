@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Publish certificates in a directory with a filename corresponding
+# to the CSR. This is suitable for ici-acme that needs to find the
+# exact certificate generated from a specific CSR.
+#
+
+set -e
+
+. $ICI_CA_DIR/ca.config
+
+if [ "x$1" != "xreq-resp" ]; then
+    exit 0
+fi
+shift
+
+if [ -z "$1" ]; then
+   echo "Error: publish req-resp: Missing arguments" >&2
+   ${ICI_PRG} help publish
+   exit 1
+fi
+
+PUBDIR="$1"
+mkdir -p "${PUBDIR}"
+
+cat "${ICI_CA_DIR}/index.txt" | while read -r status date serial foo dn; do
+    input_fn="`cat $ICI_CA_DIR/serial_db.txt | grep -i "^${serial};" | cut -d ";" -f 2`"
+    output_fn="`basename $input_fn | sed -e 's/.csr$/.pem/'`"
+
+    if [ "x${output_fn}" = "x" ]; then
+	echo "$0: Failed to generate output filename for certificate with serial '${serial}'"
+	exit 1
+    fi
+    test -f "${PUBDIR}/${output_fn}" || cp "${ICI_CA_DIR}/certs/${serial}.pem" "${PUBDIR}/${output_fn}"
+done
+
+exit 0

@@ -37,4 +37,5 @@ while [ 1 ]; do
 
     ici -v "${ICI_CA_NAME}" publish git "${ICI_CA_ROOT}/${ICI_CA_NAME}/out-git"
     ici -v "${ICI_CA_NAME}" publish html "${ICI_CA_ROOT}/${ICI_CA_NAME}/out-html"
+    ici -v "${ICI_CA_NAME}" publish req-resp "${ICI_CA_ROOT}/${ICI_CA_NAME}/out-certs"
 done

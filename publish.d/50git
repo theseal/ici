@@ -76,3 +76,5 @@ for host in `grep CN= "${ICI_CA_DIR}/index.txt" | sed -e 's/.*CN=//' | sort | un
 	    git_commit_cert "${GITREPO}/${host}.pem" $host
 	done
 done
+
+exit 0
