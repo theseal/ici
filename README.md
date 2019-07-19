@@ -19,7 +19,8 @@ What is it not good for?
 
 * Not having to pay for "real" certificates
 * Public websites and e-commerce
-* acme/letsencrypt setups
+
+There is an experimental ACME frontend over at https://github.com/SUNET/ici-acme thx to @fredrikt
 
 Acknowledgement
 ---------------
