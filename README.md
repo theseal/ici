@@ -3,7 +3,7 @@ ici - the Imbecile Certificate Issuer
 Introduction
 ------------
 
-Once there was a package called 'CSP' (https://launchpad.net/csp) [^aboutthename] which was rumored to have been used in a lot of places to build and run small-scale "in-house" CAs. The code has now degenerated to the point where I don't care to maintain it (also its perl which I've weend myself off over the years) anymore. I recently found myself wanting a simple CA again (its been a while) and decided to try my hand at rewriting CSP using an even more simple tool than perl: sh
+Once there was a package called 'CSP' [^aboutthename](https://launchpad.net/csp) which is rumored to have been used in a lot of places to build and run small-scale "in-house" CAs. The code has now degenerated to the point where I don't care to maintain it (also its perl which I've weend myself off over the years) anymore. I recently found myself wanting a simple CA again (its been a while) and decided to try my hand at rewriting CSP using an even more simple tool than perl: sh
 
 As with 'CSP' the basic architecture is simple: use existing tools like openssl and pkcs11-tool but wrap them (and their config files) in a nice blanket of sensible defaults.
 
