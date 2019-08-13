@@ -28,6 +28,10 @@ if [[ ! -d "${req_dir}" ]]; then
     exit 1
 fi
 
+if [[ $ICI_START_PCSCD ]]; then
+    /usr/sbin/pcscd
+fi
+
 while [ 1 ]; do
     inotifywait -q -e close_write -e moved_to "${req_dir}"/{server,client,peer}
 
