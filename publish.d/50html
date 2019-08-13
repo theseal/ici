@@ -31,7 +31,7 @@ fi
 (
 html_index_head > "${STAGE}/index.html"
 while read -r status date serial foo dn; do
-   html_cert_file "$status" "$date" "$serial" "$foo" "$dn" > "${STAGE}/${serial}.html"
+   test -s "${PUBDIR}/${serial}.html" || html_cert_file "$status" "$date" "$serial" "$foo" "$dn" > "${STAGE}/${serial}.html"
    html_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${STAGE}/index.html"
    csv_index_entry "$status" "$date" "$serial" "$foo" "$dn" >> "${STAGE}/index.csv"
    cp "${ICI_CA_DIR}/certs/${serial}.pem" "${STAGE}"
