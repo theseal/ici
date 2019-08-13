@@ -21,7 +21,7 @@ if [ -z "$1" ]; then
 fi
 
 PUBDIR="$1"
-mkdir -p "${PUBDIR}"
+test -d "${PUBDIR}" || git init "${PUBDIR}"
 
 cat "${ICI_CA_DIR}/index.txt" | while read -r status date serial foo dn; do
     input_fn="`cat $ICI_CA_DIR/serial_db.txt | grep -i "^${serial};" | cut -d ";" -f 2`"
