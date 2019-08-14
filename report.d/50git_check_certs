@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# Check the per-subject certificates in a git publishing repository and
+# warn about expired certificates or certificates about to expire.
+#
+
+. $ICI_CA_DIR/ca.config
+
+if [ "x${ICI_PUBLISH_GIT_REPO}" = "x" ]; then
+    exit 0
+fi
+
+expire_days=${ICI_CERT_EXPIRE_WARNING_DAYS-'7'}
+
+expired=''
+warning=''
+expired_count=0
+warning_count=0
+ok_count=0
+
+total_count=`ls -1 ${ICI_PUBLISH_GIT_REPO}/*.pem | wc -l | awk '{print $1}'` 
+echo "Status for ${total_count} subjects with certificates present in ${ICI_PUBLISH_GIT_REPO}:"
+echo ""
+
+for cert in `ls "${ICI_PUBLISH_GIT_REPO}"/*.pem | sort`; do
+    subject=`$ICI_OPENSSL x509 -noout -subject -in "${cert}" | sed -e 's/^subject[= ]*//'`
+    $ICI_OPENSSL x509 -checkend 0 -in "${cert}" > /dev/null
+    if [ $? -ne 0 ]; then
+	expired="${expired}  ${subject} ($cert)\n"
+	expired_count=$(($expired_count + 1))
+    else
+	$ICI_OPENSSL x509 -checkend $(($expire_days * 86400)) -in "${cert}" > /dev/null
+	if [ $? -ne 0 ]; then
+	    warning="${warning}  ${subject} ($cert)\n"
+	    warning_count=$(($warning_count + 1))
+	    ok_count=$(($ok_count + 1))
+	else
+	    ok_count=$(($ok_count + 1))
+	fi
+    fi
+done
+
+if [ $expired_count -ne 0 ]; then
+    echo "${expired_count} certs has expired:"
+    echo "${expired}"
+    echo ''
+fi
+
+if [ $warning_count -ne 0 ]; then
+    echo "${warning_count} certs are about to expire in less than ${expire_days} days:"
+    echo "${warning}"
+    echo ''
+fi
+
+echo "${ok_count}/${total_count} subjects with valid certificates found"
+echo ''

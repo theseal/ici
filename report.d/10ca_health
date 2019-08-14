@@ -1,0 +1,39 @@
+#!/bin/sh
+
+. $ICI_CA_DIR/ca.config
+
+expire_days=${ICI_CA_EXPIRE_WARNING_DAYS-'365'}
+
+ca_file="${ICI_CA_DIR}/ca.crt"
+
+if [ ! -f "${ca_file}" ]; then
+    echo "CA file ${ca_file} not found"
+    echo ''
+    exit 0
+fi
+
+$ICI_OPENSSL x509 -checkend 0 -in "${ca_file}" > /dev/null
+if [ $? -ne 0 ]; then
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "CA certificate (${ca_file}) has expired!"
+    $ICI_OPENSSL x509 -dates -in "${ca_file}" | grep =
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+else
+    $ICI_OPENSSL x509 -checkend $((${expire_days} * 86400)) -in "${ca_file}" > /dev/null
+    if [ $? -ne 0 ]; then
+	echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	echo "CA certificate (${ca_file}) will expire in less than ${expire_days} days"
+	$ICI_OPENSSL x509 -dates -in "${ca_file}" | grep =
+	echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    fi
+fi
+
+fp_sha256=`$ICI_OPENSSL x509 -noout -fingerprint -sha256 -in "${ca_file}" | awk -F= '{print $NF}'`
+not_after=`$ICI_OPENSSL x509 -noout -enddate -in "${ca_file}" | awk -F= '{print $NF}'`
+subject=`$ICI_OPENSSL x509 -noout -subject -in "${ca_file}" | sed -e 's/^subject[= ]*//'`
+echo "CA certificate file ${ca_file}:"
+echo "  ${subject}"
+echo "  SHA-256 fingerprint ${fp_sha256}"
+echo "  valid until ${not_after}"
+
+echo ''

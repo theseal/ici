@@ -1,0 +1,3 @@
+Usage: ici [GLOBALOPTIONS] CA report
+
+Generate a report about the status of the CA and the issued certificates.

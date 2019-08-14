@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. $ICI_CA_DIR/ca.config
+
+# There are many options for where to look to find the number of issued certificates,
+# and serial_db.txt might not suite every installed CA best (because it is a rather
+# new addition), but it seems most sensible going forward.
+num_serials=`wc -l ${ICI_CA_DIR}/serial_db.txt | awk '{print $1}'`
+echo "${num_serials} certificates in issuance database (${ICI_CA_DIR}/serial_db.txt)"
+
+num_certs=`ls -1 ${ICI_CA_DIR}/certs/*.pem | wc -l | awk '{print $1}'`
+echo "${num_certs} certificates in the archive (${ICI_CA_DIR}/certs/)"
+
+echo ''

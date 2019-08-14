@@ -6,6 +6,7 @@ RUN apt-get -y update && apt-get -y install \
     devscripts \
     git \
     help2man \
+    opensc \
     softhsm2
 COPY . /build/ici-${VERSION}
 RUN mv /build/ici-${VERSION}/ici-${VERSION}.tar.gz /build/ici_${VERSION}.orig.tar.gz
@@ -27,8 +28,10 @@ RUN apt-get -y update && apt-get -y install \
     git \
     libengine-pkcs11-openssl1.1 \
     opensc \
+    procps \
     openssl \
-    softhsm2
+    softhsm2 \
+    usbutils
 RUN ls -l /ici_${VERSION}-*.deb
 RUN dpkg -i /ici_${VERSION}-*.deb
 
