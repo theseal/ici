@@ -50,4 +50,6 @@ while [ 1 ]; do
 	ici -v "${ICI_CA_NAME}" publish html "${ICI_PUBLISH_HTML_DIR}"
     fi
     ici -v "${ICI_CA_NAME}" publish req-resp "${ICI_CA_ROOT}/${ICI_CA_NAME}/out-certs"
+
+    ici -v "${ICI_CA_NAME}" report
 done
