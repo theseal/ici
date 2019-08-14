@@ -51,7 +51,7 @@ if [ -z "$1" ]; then
    exit 1
 fi
 
-GITREPO="$1"
+GITREPO=${ICI_PUBLISH_GIT_REPO-$1}
 
 if [ ! -d "${GITREPO}/.git" ]; then
    echo "Error: publish git: Specified directory is not a Git repository" >&2
