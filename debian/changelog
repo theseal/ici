@@ -1,3 +1,10 @@
+ici (1.10-1ubuntu2) jammy; urgency=medium
+
+  [ Johan Wassberg ]
+  * Bump version to trigger build on modern OS
+
+ -- Johan Wassberg <jocar@sunet.se>  Tue, 20 Aug 2024 08:28:04 +0200
+
 ici (1.10-1ubuntu1) trusty; urgency=medium
 
   [ Leif Johansson ]
